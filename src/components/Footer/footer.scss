@@ -1,0 +1,132 @@
+.footer {
+    font-family: Montserrat;
+    display: flex;
+    justify-content: center;
+    background-color: #afe970;
+    
+    &__wrap {
+      width: 1200px;
+      padding: 50px 0;
+      display: flex;
+    }
+    &__left {
+      width: 50%;
+    }
+    &__name {
+      color: #46b91d;
+      font-family: Montserrat;
+      font-size: 40px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: normal;
+     
+    }
+    &__desc {
+      font-size: 15px;
+      margin-bottom: 70px;
+    }
+  
+    &__sign {
+      font-size: 15px;
+      
+    }
+    &__btn {
+      display: inline-block;
+      width: 120px;
+      height: 32px;
+      font-size: 15px;
+      font-weight: 400;
+      margin-left: 20px;
+    }
+  
+    &__right{
+      display: flex;
+      flex: 1;
+    }
+    &__link{
+      width: 40%;
+      &-title{
+        font-size: 24px;
+        font-weight: 700;
+      }
+      div{
+        margin-bottom: 10px;
+      }
+    }
+    &__contact{
+      flex: 1;
+      &-title{
+        font-size: 24px;
+        font-weight: 700;
+      }
+      div{
+        margin-bottom: 10px;
+      }
+      i{
+        margin: 0;
+        font-size:20px;
+        margin-right: 10px;
+      }
+    }
+  }
+  
+  // Button
+  
+  button {
+    outline: none;
+    border: none;
+    cursor: pointer;
+  }
+  .btn-1 {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10rem;
+    color: #fff;
+    letter-spacing: 0.15rem;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+  
+    &:after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #5eb600;
+  
+      border-radius: 10rem;
+      z-index: -2;
+    }
+    &:before {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0%;
+      height: 100%;
+      background-color: #fff;
+  
+      transition: all 0.3s;
+      border-radius: 10rem;
+      z-index: -1;
+    }
+    &:hover {
+      color: #5eb600;
+      &:before {
+        width: 100%;
+      }
+    }
+  }
+  
+  i {
+    margin-left: 10px;
+    font-size: 30px;
+  }
+  // End Button
+  

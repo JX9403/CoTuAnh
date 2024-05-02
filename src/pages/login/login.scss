@@ -1,0 +1,127 @@
+.login-page {
+    color: var(--color-black);
+    background: #5eb600;
+  
+    // Components
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      max-width: 80rem;
+      min-height: 100vh;
+      // width: 100%;
+      padding: 0 2rem;
+      margin: 0 auto;
+    }
+  
+    .text {
+      font-family: inherit;
+      line-height: inherit;
+      text-transform: unset;
+      text-rendering: optimizeLegibility;
+      color: #5eb600;
+      &-large {
+        font-size: 2rem;
+        font-weight: 600;
+        color: var(--color-black);
+      }
+  
+      &-normal {
+        font-size: 1rem;
+        font-weight: 400;
+        color: var(--color-black);
+      }
+  
+      &-links {
+        font-size: 1rem;
+        font-weight: 400;
+        color: var(--color-blue);
+  
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  
+    // Main
+    .main {
+      .wrapper {
+        max-width: 28rem;
+        width: 100%;
+        margin: 2rem auto;
+        padding: 2rem 2.5rem;
+        border: none;
+        outline: none;
+        border-radius: 0.5rem;
+        color: var(--color-black);
+        background: #fff;
+        box-shadow: var(--shadow-large);
+          
+      }
+    }
+
+    .ant-input:hover {
+      border-color: #5eb600;
+      border-inline-end-width: 1px;
+    }
+    
+    .ant-input:focus,
+    .ant-input-focused {
+      border-color: #5eb600;
+      box-shadow: 0 0 0 2px rgba(5, 255, 55, 0.1);
+    }
+    
+    .ant-input-affix-wrapper:not(.ant-input-affix-wrapper-disabled):hover {
+      border-color: #5eb600;
+    }
+    
+    .ant-input-affix-wrapper:focus,
+    .ant-input-affix-wrapper-focused {
+      border-color: #5eb600;
+      box-shadow: 0 0 0 2px rgba(5, 255, 88, 0.1);
+    }
+    
+    .ant-btn-primary {
+      color: #fff;
+      background-color: #5eb600;
+      box-shadow: 0 2px 0 rgba(5, 145, 255, 0.1);
+    }
+    
+    .ant-btn-primary:not(
+        :disabled
+      ):hover {
+      color: #fff;
+      background-color: #75d211;
+    }
+    .ant-form-item
+      .ant-form-item-control-input-content {
+      display: flex;
+      max-width: 100%;
+      justify-content: center;
+    }
+    .ant-btn {
+      font-size: 20px;
+      height: 60px;
+      padding: 4px 15px;
+      width: 100%;
+    }
+    
+    a {
+      color: #5eb600;
+      &:hover {
+        color: #a7eb5e;
+      }
+    }
+    
+    .ant-input-affix-wrapper{
+        height: 50px;
+      
+    }
+    .ant-form-item .ant-form-item-control-input-content{
+        height: 50px;
+    }
+    input{
+        height: 100%;;
+    }
+  }
+  

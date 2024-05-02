@@ -1,0 +1,153 @@
+.homepage-container {
+  margin: 0;
+  margin-bottom: 50px;
+  //left
+  .filter-title {
+    font-size: 20px;
+  }
+
+  .filter-radio {
+    margin-top: 10px;
+    font-size: 18px;
+    transition: all 0.3s;
+    &:hover {
+      background-color: #afe970;
+    }
+
+    .ant-radio {
+      margin-right: 30px;
+      font-size: 20px;
+    }
+  }
+
+  //right
+
+  .customize-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px 40px; //gap 40px, có 4 items trên 1 row => 3*40 = 120px cần được bớt ở width. 120/4items = 30px => calc trừ đi 30px
+    margin-top: 20px;
+    .column {
+      width: calc(25% - 35px);
+      min-height: 370px;
+
+      .wrapper {
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+        box-shadow: 0 0.0625rem 0.125rem 0 rgba(0, 0, 0, 0.4);
+        border-radius: 15px;
+        padding:20px;
+
+        &:hover {
+          box-shadow: #7dc22a 0px 2px 8px 0px;
+        }
+        
+
+        .rating {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+      }
+    }
+
+    .thumbnail {
+      height: 200px;
+      width: 100%;
+      margin: 0 auto;
+      overflow: hidden;
+      border-radius: 15px;
+      img {
+        width: 100%;
+        height: 100%;
+        background-color: white;
+        object-fit: cover;
+        transition: opacity 0.35s, transform 0.35s;
+      }
+      img:hover {
+        transform: scale(1.05);
+      }
+    }
+
+    .bottom {
+      padding: 20px 0;
+      .text {
+        font-size: 14px;
+      }
+      .price{
+        font-size: 20px;
+        color: #7dc22a;
+        font-weight: 700;
+        padding: 15px 0;
+      }
+    }
+
+    @media screen and (max-width: 600px) {
+      .column {
+        flex: unset;
+        width: calc(50% - 8px);
+        flex-wrap: wrap;
+      }
+    }
+
+    @media screen and (max-width: 800px) and (min-width: 601px) {
+      .column {
+        flex: unset;
+        width: calc(25% - 8px);
+        flex-wrap: wrap;
+      }
+    }
+  }
+}
+
+.ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
+  border-color: #7dc22a;
+  background-color: #7dc22a;
+}
+.ant-tabs .ant-tabs-tab:hover {
+  color: #7dc22a;
+}
+.ant-tabs-tab-btn {
+  font-size: 18px;
+}
+.ant-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: #7dc22a;
+  text-shadow: 0 0 0.25px #7dc22a;
+}
+
+.ant-tabs .ant-tabs-ink-bar {
+  position: absolute;
+  background: #7dc22a;
+  pointer-events: none;
+}
+
+.ant-pagination .ant-pagination-item-active a {
+    color: #7dc22a;
+}
+
+.ant-pagination .ant-pagination-item-active a:hover {
+  color: #7dc22a;
+}
+
+.ant-pagination .ant-pagination-item-active {
+    font-weight: 600;
+    background-color: #ffffff;
+    border-color: #7dc22a;
+}
+
+.ant-pagination .ant-pagination-item-active:hover {
+    border-color: #7dc22a;
+    color: #7dc22a;
+}
+
+.ant-select:not(.ant-select-disabled):not(.ant-select-customize-input):not(.ant-pagination-size-changer):hover .ant-select-selector {
+    border-color: #7dc22a;
+}
+.ant-tabs-top >.ant-tabs-nav::before{
+    border-bottom: 2px solid rgba(0, 0, 0, 0.079);
+}
+.ant-tabs{
+    width: 100%;
+ 
+}

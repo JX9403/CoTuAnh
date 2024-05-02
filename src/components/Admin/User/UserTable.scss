@@ -1,0 +1,35 @@
+.ant-btn-default:not(:disabled):hover {
+  color: #8ee46e;
+  border-color: #46b91d;
+}
+.ant-btn-primary {
+  color: #fff;
+  background-color: #46b91d;
+  box-shadow: 0 2px 0 rgba(5, 255, 13, 0.1);
+}
+.ant-btn-primary:not(:disabled):hover {
+  color: #fff;
+  background-color: #8ee46e;
+}
+
+.ant-input:focus,
+.ant-input-focused {
+  border-color: #46b91d;
+  box-shadow: 0 0 0 2px rgba(18, 255, 5, 0.1);
+}
+
+.ant-input:hover {
+  border-color: #46b91d;
+}
+
+.ant-input {
+  border-radius: 8px;
+}
+
+a {
+  color: #46b91d;
+}
+
+a:hover {
+  color: #8ee46e;
+}
