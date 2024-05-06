@@ -75,6 +75,7 @@ const UserModalUpdate = (props) => {
             rules={[{ required: true, message: "Họ tên không được để trống!" }]}
           >
             <Input />
+            
           </Form.Item>
 
           <Form.Item

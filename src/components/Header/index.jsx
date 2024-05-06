@@ -36,7 +36,7 @@ const Header = (props) => {
 
   let items = [
     {
-      label: <label style={{ cursor: "pointer" }}>Quản lý tài khoản</label>,
+      label: <Link to="/account">Quản lý tài khoản</Link>,
       key: "account",
     },
     {
@@ -68,11 +68,11 @@ const Header = (props) => {
         onClose={() => setOpenDrawer(false)}
         open={openDrawer}
       >
-        <p>Quản lý tài khoản</p>
+        {/* <p>Quản lý tài khoản</p>
         <Divider />
 
         <p>Đăng xuất</p>
-        <Divider />
+        <Divider /> */}
       </Drawer>
 
       <div className="header-container">

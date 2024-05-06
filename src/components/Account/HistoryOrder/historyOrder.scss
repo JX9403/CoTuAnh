@@ -1,0 +1,66 @@
+.order {
+  width: 100%;
+
+  padding: 20px;
+  &-box {
+    margin-bottom: 30px;
+    border-radius: 8px;
+    background-color: #fff;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 0.0625rem 0.125rem 0 rgba(0, 0, 0, 0.4);
+    &:hover {
+      box-shadow: #7dc22a 0px 2px 8px 0px;
+    }
+  }
+  .item {
+    &-id {
+      font-family: Montserrat;
+    }
+    &-status {
+      color: #46b91d;
+      font-family: Montserrat;
+    }
+    &-img {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      img {
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+      }
+    }
+
+    &-title {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    &-price {
+      font-size: 18px;
+      font-weight: 700;
+      color: #46b91d;
+    }
+  }
+
+  &-price {
+    font-size: 20px;
+    margin-bottom: 30px;
+    color: #46b91d;
+    span {
+      font-size: 24px;
+      font-weight: 700;
+      color: #46b91d;
+    }
+  }
+  &-btn {
+    margin-right: 15px;
+    width: 125px;
+    height: 45px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
