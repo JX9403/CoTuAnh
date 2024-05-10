@@ -4,36 +4,45 @@ import { FiShoppingCart } from "react-icons/fi";
 import { VscSearchFuzzy } from "react-icons/vsc";
 import { Divider, Badge, Drawer, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { DownOutlined, GithubOutlined } from "@ant-design/icons";
+import { DownOutlined, GithubOutlined, SearchOutlined } from "@ant-design/icons";
 import { Dropdown, Space } from "antd";
 import { useNavigate } from "react-router";
-import { callLogout } from "../../services/api";
 import "./header.scss";
 import { doLogoutAction } from "../../redux/account/accountSlice";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const Header = (props) => {
-  
-  
   const [openDrawer, setOpenDrawer] = useState(false);
   const isAuthenticated = useSelector((state) => state.account.isAuthenticated);
   const user = useSelector((state) => state.account.user);
+
+  const [input, setInput] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleChange = (e) => {
-    props.setSearchTerm(e.target.value);
-    navigate("/home")
-  }
-  const handleLogout = async () => {
-    const res = await callLogout();
-    if (res && res.data) {
-      dispatch(doLogoutAction());
-      message.success("Đăng xuất thành công");
-      navigate("/");
+    setInput(e.target.value);
+    // props.setSearchTerm(e.target.value);
+    // navigate("/home")
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      props.setSearchTerm(input);
+      navigate("/home");
     }
   };
 
+  const handleClickIcon = () => {
+    props.setSearchTerm(input);
+    navigate("/home");
+  }
+
+  const handleLogout = async () => {
+    dispatch(doLogoutAction());
+    message.success("Đăng xuất thành công");
+    navigate("/");
+  };
   let items = [
     {
       label: <Link to="/account">Quản lý tài khoản</Link>,
@@ -61,7 +70,6 @@ const Header = (props) => {
   }
   return (
     <>
-      
       <Drawer
         title="Menu chức năng"
         placement="left"
@@ -77,7 +85,9 @@ const Header = (props) => {
 
       <div className="header-container">
         <header className="header">
-          <div className="header__logo" onClick={() => navigate("/")}>MinMax</div>
+          <div className="header__logo" onClick={() => navigate("/")}>
+            MinMax
+          </div>
           <div className="header__menu">
             <div className="header__menu-item" onClick={() => navigate("/")}>
               Trang chủ
@@ -96,8 +106,17 @@ const Header = (props) => {
             </div>
           </div>
           <div className="header__search">
-            <input onChange={handleChange} type={"text"} placeholder="Bạn tìm gì hôm nay" />
+            <input
+              onChange={handleChange}
+              onKeyDown={handleKeyDown}
+              type={"text"}
+              placeholder="Bạn tìm gì hôm nay"
+            />
+            <div className="header__search-icon" onClick={handleClickIcon}>
+              <SearchOutlined />
+            </div>
           </div>
+
           <div className="header__icon">
             <div className="header__cart">
               <Badge count={5} size={"small"}>

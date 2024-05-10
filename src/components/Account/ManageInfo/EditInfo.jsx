@@ -1,35 +1,53 @@
-import { Button, Divider, Form, Input } from "antd";
+import { Button, Divider, Form, Input, message, notification } from "antd";
 
 import { useNavigate } from "react-router-dom";
 
 import "./manageInfo.scss";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "antd/es/form/Form";
-import { callUpdateUser } from "../../../services/api";
-import { useState } from "react";
+import { callUpdateInfo } from "../../../services/api";
+import { useEffect, useState } from "react";
+import { doUpdateAccountAction } from "../../../redux/account/accountSlice";
 const EditInfo = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [isSubmit, setIsSubmit] = useState(false);
 
   const [form] = useForm();
 
   const onFinish = async (values) => {
-    alert("onFinish()");
-    navigate(-1);
-    // const { _id, fullName, phone } = values;
-    // setIsSubmit(true);
-    // const res = await callUpdateUser(_id, fullName, phone);
+    values = {
+      ...values,
+      date_of_birth: "2024-05-10T11:54:40.494Z",
+      address: "string",
+    };
+    const { full_name, email, date_of_birth, address } = values;
+
+    setIsSubmit(true);
+
+    const res = await callUpdateInfo(full_name, email, date_of_birth, address);
+
+    dispatch(
+      doUpdateAccountAction({ full_name, email, date_of_birth, address })
+    );
+    localStorage.removeItem("access_token")
+    console.log(res);
     // if (res && res.data) {
     //   message.success("Lưu thành công !");
     //   form.resetFields();
     // } else {
     //   notification.error({
     //     message: "Đã có lỗi xảy ra !",
-    //     description: res.message,
+    //     description: "Đã có lỗi xảy ra !",
     //   });
     // }
     // setIsSubmit(false);
+    navigate(-1);
   };
+
+  // useEffect(() => {
+
+  // }, [])
 
   const user = useSelector((state) => state.account.user);
 
@@ -46,7 +64,7 @@ const EditInfo = () => {
           <Form.Item
             labelCol={{ span: 24 }} //whole column
             label="Họ tên"
-            name="fullName"
+            name="full_name"
             rules={[{ required: true, message: "Họ tên không được để trống!" }]}
           >
             <Input />
@@ -64,7 +82,7 @@ const EditInfo = () => {
           <Form.Item
             labelCol={{ span: 24 }} //whole column
             label="Số điện thoại"
-            name="phone"
+            name="phone_number"
             rules={[
               { required: true, message: "Số điện thoại không được để trống!" },
             ]}
@@ -72,11 +90,20 @@ const EditInfo = () => {
             <Input disabled />
           </Form.Item>
 
-          <div className="btn" >
-            <Button type="primary" size="large" onClick={onFinish} style={{marginRight:'20px', width:'120px'}}>
+          <div className="btn">
+            <Button
+              type="primary"
+              size="large"
+              onClick={onFinish}
+              style={{ marginRight: "20px", width: "120px" }}
+            >
               Lưu
             </Button>
-            <Button  size="large" onClick={() => navigate(-1)} style={{ width:'120px'}}>
+            <Button
+              size="large"
+              onClick={() => navigate(-1)}
+              style={{ width: "120px" }}
+            >
               Hủy
             </Button>
           </div>

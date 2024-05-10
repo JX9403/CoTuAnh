@@ -1,12 +1,12 @@
-
 .header-container {
   width: 100%;
   height: 80px;
   align-items: center;
   justify-content: center;
   z-index: 999;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
- 
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+    rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+
   .header {
     z-index: 999;
     margin: 0 30px;
@@ -30,7 +30,7 @@
     &__menu {
       width: 40%;
       height: 100%;
-      
+
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -43,38 +43,45 @@
         font-size: 20px;
         cursor: pointer;
         transition: all 0.3s;
-        &:hover{
-            color: #46b91d;
+        &:hover {
+          color: #46b91d;
         }
       }
-
-      
     }
 
     &__search {
+      position: relative;
       width: 25%;
       height: 50%;
       input {
-        width: 90%;
+        width: 100%;
         height: 100%;
         padding: 0 15px;
         border-radius: 45px;
         outline: none;
         border: 1px solid #46b91d;
       }
+      &-icon {
+        position: absolute;
+        top: calc(50% - 13px);
+        right:13px;
+        font-size: 26px;
+        color: var(--color-blue);
+        cursor: pointer;
+      }
     }
 
     &__icon {
       width: 10%;
       display: flex;
-      
-      .icon-cart{
+
+      .icon-cart {
         font-size: 30px;
         cursor: pointer;
         color: #46b91d;
       }
 
-      .icon-acc{
+      .icon-acc {
         cursor: pointer;
         font-size: 30px;
         margin-left: 20px;

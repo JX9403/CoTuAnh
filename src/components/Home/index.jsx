@@ -1,12 +1,10 @@
 import { FilterTwoTone, ReloadOutlined } from "@ant-design/icons";
+import APIKit from "../../utils/axios";
 import {
   Row,
   Col,
   Form,
-  Checkbox,
   Divider,
-  InputNumber,
-  Button,
   Rate,
   Tabs,
   Pagination,
@@ -15,50 +13,63 @@ import {
   Space,
 } from "antd";
 import "./home.scss";
+
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+
 import { useEffect, useState } from "react";
-import { callFetchCategory, callFetchListBook } from "../../services/api";
+import { callFetchCategory, callFetchListProduct } from "../../services/api";
 import { useNavigate, useOutletContext } from "react-router-dom";
+
+const loadingItem = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 11, 12, 13];
 const Home = () => {
   const [searchTerm, setSearchTerm] = useOutletContext();
   const [listCategory, setListCategory] = useState([]);
 
-  const [listBook, setListBook] = useState([]);
+  const [listProduct, setListProduct] = useState([]);
   const [current, setCurrent] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(10);
   const [total, setTotal] = useState(0);
 
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingProduct, setIsLoadingProduct] = useState(false);
+
   const [filter, setFilter] = useState("");
 
   // khi mới vào trang sẽ là phổ biến => sắp xếp theo bán được nhiều nhất
-  const [sortQuery, setSortQuery] = useState("sort=-sold");
+  const [sortQuery, setSortQuery] = useState("sort=sold&order=desc");
 
   const [form] = Form.useForm();
+
   // Call api cho danh mục sản phẩm
   useEffect(() => {
+    setIsLoading(true);
     const initCategory = async () => {
       const res = await callFetchCategory();
-      if (res && res.data) {
-        const d = res.data.map((item) => {
+      // console.log("cate: ",res.data.data)
+      if (res && res.data.data) {
+        const d = res.data.data.map((item) => {
           return {
-            label: item,
-            value: item,
+            label: item.categoryName,
+            value: item.id,
           };
         });
         setListCategory(d);
       }
+      setIsLoading(false);
     };
     initCategory();
   }, []);
 
   //Call api cho sản phẩm
   useEffect(() => {
-    fetchBook();
+    fetchProduct();
   }, [current, pageSize, filter, sortQuery, searchTerm]);
 
-  const fetchBook = async () => {
-    setIsLoading(true);
-    let query = `current=${current}&pageSize=${pageSize}`;
+  const fetchProduct = async () => {
+    setIsLoadingProduct(true);
+    let query = `page=${current}&limit=${pageSize}`;
+
     if (filter) {
       query += `&${filter}`;
     }
@@ -68,16 +79,17 @@ const Home = () => {
     }
 
     if (searchTerm) {
-      query += `&mainText=/${searchTerm}/i`;
+      query += `&keyword=${searchTerm}`;
     }
-
-    const res = await callFetchListBook(query);
-
+    // console.log(searchTerm)
+    const res = await callFetchListProduct(query);
+    console.log(res.data.data.products);
     if (res && res.data) {
-      setListBook(res.data.result);
-      setTotal(res.data.meta.total);
+      // console.log(res.data.data.total_pages);
+      setListProduct(res.data.data.products);
+      setTotal(res.data.data.total_pages);
     }
-    setIsLoading(false);
+    setIsLoadingProduct(false);
   };
 
   const handleChangeFilter = (changedValues, values) => {
@@ -86,7 +98,7 @@ const Home = () => {
     if (changedValues.category) {
       const cate = values.category;
       if (cate) {
-        setFilter(`category=${cate}`);
+        setFilter(`category_id=${cate}`);
       } else {
         setFilter("");
       }
@@ -105,8 +117,10 @@ const Home = () => {
 
   const navigate = useNavigate();
 
-  const handleClick = (item) => {
-    navigate(`/product/${item._id}`);
+  const handleClick = async (item) => {
+    // const res = await callProductImg(item.images[0].image_url);
+    console.log(res);
+     navigate(`/product/${item._id}`);
   };
   // const onFinish = (values) => {};
 
@@ -116,22 +130,17 @@ const Home = () => {
 
   const items = [
     {
-      key: "sort=-sold",
+      key: "sort=sold&order=desc",
       label: `Phổ biến`,
       children: <></>,
     },
     {
-      key: "sort=-updateAt",
-      label: `Hàng Mới`,
-      children: <></>,
-    },
-    {
-      key: "sort=price",
+      key: "sort=price&order=asc",
       label: `Giá Thấp Đến Cao`,
       children: <></>,
     },
     {
-      key: "sort=-price",
+      key: "sort=price&order=desc",
       label: `Giá Cao Đến Thấp`,
       children: <></>,
     },
@@ -221,12 +230,11 @@ const Home = () => {
             </Form.Item>
           </Form>
         </Col>
-
         {/* RIGHT */}
         <Col md={19} xs={24} className="homepage-right" style={styleRight}>
           <Row>
             <Tabs
-              defaultActiveKey="sort=-sold"
+              defaultActiveKey="sort=sold&order=desc"
               items={items}
               onChange={(value) => {
                 setSortQuery(value);
@@ -235,45 +243,80 @@ const Home = () => {
           </Row>
 
           <Row className="customize-row">
-            {listBook.map((item, index) => {
-              return (
-                <>
-                  <div
-                    className="column"
-                    key={index}
-                    onClick={() => handleClick(item)}
-                  >
+            {isLoadingProduct ? (
+              <>
+                {loadingItem.map((_item, index) => (
+                  <div className="column" key={index}>
                     <div className="wrapper">
-                      <div className="thumbnail">
-                        <img
-                          src={
-                            "http://localhost:8080/images/book/" +
-                            item.thumbnail
-                          }
-                        />
-                      </div>
+                      <Skeleton
+                        isLoading={isLoadingProduct}
+                        className="thumbnail"
+                      ></Skeleton>
                       <div className="bottom">
-                        <div className="text">{item.mainText}</div>
-                        <div className="price">
-                          {new Intl.NumberFormat("vi-VN", {
-                            style: "currency",
-                            currency: "VND",
-                          }).format(item.price)}
-                        </div>
-                        <div className="rating">
-                          <Rate
-                            value={5}
-                            disabled
-                            style={{ color: "#ffce3d", fontSize: 10 }}
-                          />
-                          <span>Đã bán {item.sold}</span>
-                        </div>
+                        <Skeleton
+                          className="text"
+                          style={{ marginBottom: "10px", height: "20px" }}
+                        ></Skeleton>
+                        <Skeleton
+                          className="text"
+                          style={{
+                            marginBottom: "10px",
+                            height: "20px",
+                            width: "60%",
+                          }}
+                        ></Skeleton>
+                        <Skeleton
+                          className="rating"
+                          style={{
+                            marginBottom: "10px",
+                            height: "20px",
+                            width: "80%",
+                          }}
+                        ></Skeleton>
                       </div>
                     </div>
                   </div>
-                </>
-              );
-            })}
+                ))}
+              </>
+            ) : (
+              <>
+                {listProduct.map((item, index) => {
+                  return (
+                    <>
+                      <div
+                        className="column"
+                        key={index}
+                        onClick={() => handleClick(item)}
+                      >
+                        <div className="wrapper">
+                          <div className="thumbnail">
+                            <img src={item.images[0].image_url} />
+                            {/* https://backend-online-supermarket-sales-website.onrender.com/api/v1/productImages/${item.images[0].image_url} */}
+                          </div>
+                          <div className="bottom">
+                            <div className="text">{item.product_name}</div>
+                            <div className="price">
+                              {new Intl.NumberFormat("vi-VN", {
+                                style: "currency",
+                                currency: "VND",
+                              }).format(item.price)}
+                            </div>
+                            <div className="rating">
+                              <Rate
+                                value={5}
+                                disabled
+                                style={{ color: "#ffce3d", fontSize: 10 }}
+                              />
+                              <span>Đã bán {item.sold}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  );
+                })}
+              </>
+            )}
           </Row>
           <Divider />
 

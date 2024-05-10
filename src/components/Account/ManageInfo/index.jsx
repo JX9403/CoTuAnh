@@ -23,7 +23,7 @@ const ManageInfo = () => {
           <Form.Item
             labelCol={{ span: 24 }} //whole column
             label="Họ tên"
-            name="fullName"
+            name="full_name"
             rules={[{ required: true, message: "Họ tên không được để trống!" }]}
           >
             <Input disabled />
@@ -41,7 +41,7 @@ const ManageInfo = () => {
           <Form.Item
             labelCol={{ span: 24 }} //whole column
             label="Số điện thoại"
-            name="phone"
+            name="phone_number"
             rules={[
               { required: true, message: "Số điện thoại không được để trống!" },
             ]}

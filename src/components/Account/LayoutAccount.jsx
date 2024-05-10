@@ -11,7 +11,6 @@ import { Modal, Layout, Menu, message } from "antd";
 import { Outlet, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { callLogout } from "../../services/api";
 import { doLogoutAction } from "../../redux/account/accountSlice";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -35,13 +34,10 @@ const LayoutAccount = () => {
     setOpen(false);
   };
   const handleLogout = async () => {
-    const res = await callLogout();
-    if (res && res.data) {
-      dispatch(doLogoutAction());
-      message.success("Đăng xuất thành công");
-      navigate("/");
-    }
-  };
+    dispatch(doLogoutAction());
+    message.success("Đăng xuất thành công");
+    navigate("/");
+};
   const items = [
     {
       label: <label>Hồ sơ</label>,

@@ -1,25 +1,44 @@
-import axios from "../utils/axios-customize";
+import apiClient, { setClientToken } from "../utils/axios";
+import axios from "../utils/axios";
 
-export const callRegister = (fullName, email, password, phone) => {
-  return axios.post("/api/v1/user/register", {
-    fullName,
+export const callRegister = (
+  full_name,
+  email,
+  password,
+  phone_number,
+  role,
+  address,
+  date_of_birth,
+  avatar
+) => {
+  return axios.post("/api/v1/users/register", {
+    full_name,
     email,
     password,
-    phone,
+    phone_number,
+    role,
+    address,
+    date_of_birth,
+    avatar,
   });
 };
 
-export const callLogin = (username, password) => {
-  return axios.post("/api/v1/auth/login", { username, password });
+export const callLogin = (phone_number, password) => {
+  return axios.post("/api/v1/users/login", { phone_number, password });
 };
 
 export const callFetchAccount = () => {
-  return axios.get("/api/v1/auth/account");
+  return apiClient.get("/api/v1/users/details");
 };
 
-export const callLogout = () => {
-  return axios.post("/api/v1/auth/logout");
+export const callUpdateInfo = (full_name, email, date_of_birth, address ) => {
+  return axios.put("/api/v1/users/details", {full_name, email, date_of_birth, address });
 };
+
+
+
+
+
 
 // Call manager user
 export const callFetchListUser = (query) => {
@@ -40,16 +59,11 @@ export const callDeleteUser = (id) => {
 // End manager user
 
 export const callFetchCategory = () => {
-  return axios.get(`/api/v1/database/category`);
+  return axios.get(`/api/v1/categories`);
 };
 
-export const callFetchListBook = (query) => {
-  return axios.get(`/api/v1/book?${query}`);
-};
-
-// Call  manage product
 export const callFetchListProduct = (query) => {
-  return axios.get(`/api/v1/book?${query}`);
+  return axios.get(`/api/v1/products?${query}`);
 };
 
 export const callCreateProduct = (
@@ -59,7 +73,8 @@ export const callCreateProduct = (
   category,
   quantity,
   sold,
-  thumbnail, slider
+  thumbnail,
+  slider
 ) => {
   return axios.post("/api/v1/book", {
     mainText,
@@ -68,7 +83,8 @@ export const callCreateProduct = (
     category,
     quantity,
     sold,
-    thumbnail, slider
+    thumbnail,
+    slider,
   });
 };
 
@@ -100,3 +116,8 @@ export const callUploadProductImg = (fileImg) => {
 export const callFetchListOrder = (query) => {
   return axios.get(`/api/v1/book?${query}`);
 };
+
+
+export const callProductImg = (img) => {
+  return axios.get(`/api/v1/productImage/${img}`);
+}

@@ -50,8 +50,9 @@ export default function App() {
       return;
 
     const res = await callFetchAccount();
-    if (res && res.data) {
-      dispatch(doGetAccountAction(res.data));
+    console.log("check getaccount ", res);
+    if (res && res.data.data) {
+      dispatch(doGetAccountAction(res.data.data));
     }
   };
 
@@ -150,6 +151,8 @@ export default function App() {
       {isLoading === false ||
       window.location.pathname === "/login" ||
       window.location.pathname === "/register" ||
+      window.location.pathname === "/home" ||
+      window.location.pathname === "/contact" ||
       window.location.pathname === "/" ? (
         <RouterProvider router={router} />
       ) : (
