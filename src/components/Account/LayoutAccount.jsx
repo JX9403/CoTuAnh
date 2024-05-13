@@ -22,7 +22,7 @@ const LayoutAccount = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [activeMenu, setActiveMenu] = useState("dashboard");
   const user = useSelector((state) => state.account.user);
-
+// console.log("check user vào quản lý tài khoản",user)
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -113,11 +113,15 @@ const LayoutAccount = () => {
             onClick={(e) => setActiveMenu(e.key)}
           />
         </Sider>
+
+
         <Layout>
           <Content>
             <Outlet />
           </Content>
         </Layout>
+
+
         <Modal
           width={"500px"}
           title="Bạn muốn đăng xuất khỏi tài khoản ?"

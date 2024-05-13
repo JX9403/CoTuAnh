@@ -1,4 +1,4 @@
-import apiClient, { setClientToken } from "../utils/axios";
+import apiClient from "../utils/axios";
 import axios from "../utils/axios";
 
 export const callRegister = (
@@ -28,17 +28,35 @@ export const callLogin = (phone_number, password) => {
 };
 
 export const callFetchAccount = () => {
-  return apiClient.get("/api/v1/users/details");
+  return axios.get("/api/v1/users/details");
 };
 
-export const callUpdateInfo = (full_name, email, date_of_birth, address ) => {
-  return axios.put("/api/v1/users/details", {full_name, email, date_of_birth, address });
+export const callUpdateInfo = async (updatedUserData) => {
+  // console.log("check data gửi sang call api", updatedUserData);
+  const { full_name, email, date_of_birth, address } = updatedUserData;
+  const response = await axios.put("/api/v1/users/details", {
+    full_name,
+    email,
+    date_of_birth,
+    address,
+  });
+  // console.log("check data sau khi call api", response);
+  return response;
 };
 
+export const callChangePassword = async (password, new_password) => {
+  console.log("check data change pass gui len api", { password, new_password });
+  const res = await axios.put("/api/v1/users/details/change-password", {
+    password,
+    new_password,
+  });
+  // console.log("check res change pass", res);
+  return res;
+};
 
-
-
-
+export const callListOrder = () => {
+  return axios.get("/api/v1/orders/history");
+};
 
 // Call manager user
 export const callFetchListUser = (query) => {
@@ -117,7 +135,17 @@ export const callFetchListOrder = (query) => {
   return axios.get(`/api/v1/book?${query}`);
 };
 
-
 export const callProductImg = (img) => {
   return axios.get(`/api/v1/productImage/${img}`);
-}
+};
+
+export const callCommentProduct = async (comment) => {
+  console.log("check data gửi sang call api", comment);
+  const { user_id, product_id, content, star } = comment;
+  console.log({ user_id, product_id, content, star})
+  const response = await axios.post("/api/v1/comments", {
+    user_id, product_id, content, star
+  });
+  // console.log("check data sau khi call api", response);
+  return response;
+};

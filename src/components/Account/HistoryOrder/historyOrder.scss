@@ -15,6 +15,11 @@
     }
   }
   .item {
+    &-product{
+      margin-bottom: 15px;
+      border-bottom: 1px solid #ddd;
+      padding: 20px 0;
+    }
     &-id {
       font-family: Montserrat;
     }
@@ -26,9 +31,10 @@
       width: 100%;
       display: flex;
       align-items: center;
+     
       img {
-        width: 120px;
-        height: 120px;
+        width: 110px;
+        height: 110px;
         object-fit: cover;
       }
     }
@@ -40,7 +46,7 @@
 
     &-price {
       font-size: 18px;
-      font-weight: 700;
+      // font-weight: 700;
       color: #46b91d;
     }
   }
@@ -57,10 +63,13 @@
   }
   &-btn {
     margin-right: 15px;
-    width: 125px;
-    height: 45px;
+    width: 100px;
+    height: 40px;
     display: inline-flex;
     justify-content: center;
     align-items: center;
+    border-radius: 8px;
   }
+
+
 }

@@ -11,7 +11,7 @@ import {
   DownOutlined,
   GithubOutlined,
 } from "@ant-design/icons";
-import { Layout, Menu, Dropdown, Space, message } from "antd";
+import { Layout, Menu, Dropdown, Space, message, Modal } from "antd";
 import { Outlet, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import "./layout.scss";
@@ -21,36 +21,6 @@ import { doLogoutAction } from "../../redux/account/accountSlice";
 
 const { Content, Footer, Sider } = Layout;
 
-const items = [
-  {
-    label: <Link to="/admin">Dashboard</Link>,
-    key: "dashboard",
-    icon: <AppstoreOutlined />,
-  },
-  {
-    label: <span>Quản lý tài khoản</span>,
-    // key: 'user',
-    icon: <UserOutlined />,
-    children: [
-      {
-        label: <Link to="/admin/user">Quản lý tài khoản</Link>,
-        key: "crud",
-        icon: <TeamOutlined />,
-      },
-    ],
-  },
-  {
-    label: <Link to="/admin/product">Quản lý sản phẩm</Link>,
-    key: "product",
-    icon: <ExceptionOutlined />,
-  },
-  {
-    label: <Link to="/admin/order">Quản lý hóa đơn</Link>,
-    key: "order",
-    icon: <DollarCircleOutlined />,
-  },
-];
-
 const LayoutAdmin = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [activeMenu, setActiveMenu] = useState("dashboard");
@@ -58,25 +28,67 @@ const LayoutAdmin = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const [open, setOpen] = useState(false);
+  const showModal = () => {
+    setOpen(true);
+  };
+  const hideModal = () => {
+    setOpen(false);
+  };
   const handleLogout = async () => {
     dispatch(doLogoutAction());
     message.success("Đăng xuất thành công");
-    navigate("/");
-};
+    navigate("/admin");
+  };
+  const items = [
+    {
+      label: <Link to="/admin">Dashboard</Link>,
+      key: "dashboard",
+      icon: <AppstoreOutlined />,
+    },
+    {
+      label: <span>Quản lý tài khoản</span>,
+      // key: 'user',
+      icon: <UserOutlined />,
+      children: [
+        {
+          label: <Link to="/admin/user/client">Khách hàng</Link>,
+          key: "client",
+          icon: <TeamOutlined />,
+        },
+        {
+          label: <Link to="/admin/user/staff">Nhân viên</Link>,
+          key: "staff",
+          icon: <TeamOutlined />,
+        },
+      ],
+    },
+    {
+      label: <Link to="/admin/product">Quản lý sản phẩm</Link>,
+      key: "product",
+      icon: <ExceptionOutlined />,
+    },
+    {
+      label: <Link to="/admin/order">Quản lý hóa đơn</Link>,
+      key: "order",
+      icon: <DollarCircleOutlined />,
+    },
+    {
+      label: <Link to="/admin/account">Tài khoản của tôi</Link>,
+      key: "account",
+      icon: <DollarCircleOutlined />,
+    },
+    {
+      label: <div onClick={showModal}>Đăng xuất</div>,
+      key: "logout",
+      icon: <DollarCircleOutlined />,
+    },
+  ];
 
   const itemsDropdown = [
     {
-      label: <Link to="/">Trang chủ</Link>,
-      key: "/",
-    },
-    {
       label: <Link to="/admin">Trang quản trị</Link>,
       key: "admin",
-    },
-    {
-      label: <Link to="/account">Quản lý tài khoản</Link>,
-      key: "account",
     },
     {
       label: <label onClick={() => handleLogout()}>Đăng xuất</label>,
@@ -141,6 +153,19 @@ const LayoutAdmin = () => {
           <Outlet />
         </Content>
       </Layout>
+
+      <Modal
+        width={"500px"}
+        title="Bạn muốn đăng xuất khỏi tài khoản ?"
+        open={open}
+        onOk={handleLogout}
+        onCancel={() => {
+          hideModal();
+          navigate("/admin");
+        }}
+        okText="Đăng xuất"
+        cancelText="Hủy"
+      ></Modal>
     </Layout>
   );
 };

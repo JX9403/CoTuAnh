@@ -1,20 +1,24 @@
 import axios from 'axios'
 
+const token = localStorage.getItem('access_token');
 const apiClient = axios.create({
+  headers: {
+    Authorization: `Bearer ${token}`, // Using Bearer token format
+  },
   baseURL :'https://backend-online-supermarket-sales-website.onrender.com/',
 
 });
 
 //apiClient.defaults.headers.common = { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
 
-export const setClientToken = (token) => {
-  apiClient.interceptors.request.use(async function(config) {
-    config.headers.Authorization = "Bearer " + token;
-    return config;
-  });
-};
+// export const setClientToken = (token) => {
+//   apiClient.interceptors.request.use(async function(config) {
+//     config.headers.Authorization = "Bearer " + token;
+//     return config;
+//   });
+// };
 
-setClientToken(localStorage.getItem('access_token'))
+// setClientToken(localStorage.getItem('access_token'))
 
 
 export default apiClient;

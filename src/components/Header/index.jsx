@@ -4,7 +4,11 @@ import { FiShoppingCart } from "react-icons/fi";
 import { VscSearchFuzzy } from "react-icons/vsc";
 import { Divider, Badge, Drawer, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { DownOutlined, GithubOutlined, SearchOutlined } from "@ant-design/icons";
+import {
+  DownOutlined,
+  GithubOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
 import { Dropdown, Space } from "antd";
 import { useNavigate } from "react-router";
 import "./header.scss";
@@ -36,7 +40,7 @@ const Header = (props) => {
   const handleClickIcon = () => {
     props.setSearchTerm(input);
     navigate("/home");
-  }
+  };
 
   const handleLogout = async () => {
     dispatch(doLogoutAction());
@@ -58,16 +62,6 @@ const Header = (props) => {
     },
   ];
 
-  if (user?.role === "ADMIN") {
-    items.unshift({
-      label: <Link to="/admin">Trang quản trị</Link>,
-      key: "admin",
-    });
-    items.unshift({
-      label: <Link to="/">Trang chủ</Link>,
-      key: "/",
-    });
-  }
   return (
     <>
       <Drawer

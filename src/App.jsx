@@ -24,8 +24,10 @@ import OrderTable from "./components/Admin/Order/OrderTable";
 import HistoryOrder from "./components/Account/HistoryOrder";
 import ManageInfo from "./components/Account/ManageInfo";
 import LayoutAccount from "./components/Account/LayoutAccount";
-import EditInfo from "./components/Account/ManageInfo/EditInfo";
 import ChangePass from "./components/Account/ChangePass";
+import ManageInfoAdmin from "./components/Admin/ManageInfoAdmin";
+import ClientTable from "./components/Admin/User/Client/ClientTable";
+
 
 const Layout = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -50,7 +52,7 @@ export default function App() {
       return;
 
     const res = await callFetchAccount();
-    console.log("check getaccount ", res);
+    // console.log("check get account ", res);
     if (res && res.data.data) {
       dispatch(doGetAccountAction(res.data.data));
     }
@@ -67,6 +69,15 @@ export default function App() {
       errorElement: <NotFound />,
       children: [
         { index: true, element: <AboutPage /> },
+        {
+          path: "/login",
+          element: <LoginPage />,
+        },
+
+        {
+          path: "/register",
+          element: <RegisterPage />,
+        },
         {
           path: "contact",
           element: <ContactPage />,
@@ -91,13 +102,10 @@ export default function App() {
               path: "order",
               element: <HistoryOrder />,
             },
+
             {
               index: true,
               element: <ManageInfo />,
-            },
-            {
-              path: "edit",
-              element: <EditInfo />,
             },
             {
               path: "password",
@@ -106,15 +114,6 @@ export default function App() {
           ],
         },
       ],
-    },
-    {
-      path: "/login",
-      element: <LoginPage />,
-    },
-
-    {
-      path: "/register",
-      element: <RegisterPage />,
     },
 
     {
@@ -132,7 +131,16 @@ export default function App() {
         },
         {
           path: "user",
-          element: <UserTable />,
+          children: [
+            {
+              path: "client",
+              element: <ClientTable />,
+            },
+            {
+              path: "staff",
+              element: <UserTable />,
+            },
+          ],
         },
         {
           path: "product",
@@ -141,6 +149,19 @@ export default function App() {
         {
           path: "order",
           element: <OrderTable />,
+        },
+        {
+          path: "account",
+          children: [
+            {
+              index: true,
+              element: <ManageInfoAdmin />,
+            },
+            {
+              path: "password",
+              element: <ChangePass />,
+            },
+          ],
         },
       ],
     },

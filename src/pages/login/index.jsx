@@ -17,14 +17,23 @@ const LoginPage = () => {
     // console.log(values)
     setIsSubmit(true);
     const res = await callLogin(phone_number, password);
-    console.log(res.data.data.user)
+    // console.log(res.data.data.user)
     setIsSubmit(false);
     if (res?.data.data) {
       // lưu dữ token vào localstorage
       localStorage.setItem("access_token", res.data.data.access_token);
       dispatch(doLoginAction(res.data.data.user))
       message.success("Đăng nhập tài khoản thành công!");
-      navigate("/");
+      console.log("check user sau khi dang nhap", res.data.data.user)
+
+      // Chuyển hướng phân quyền 
+      if(res.data.data.user.role === "ADMIN"){
+        navigate("/admin")
+      } else {
+        navigate("/")
+      }
+
+      
     } else {
       notification.error({
         message: "Có lỗi xảy ra",
@@ -33,7 +42,7 @@ const LoginPage = () => {
       });
     }
   };
-
+ 
   return (
     <div className="login-page">
       <main className="main">

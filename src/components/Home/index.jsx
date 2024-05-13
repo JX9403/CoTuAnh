@@ -21,20 +21,47 @@ import { useEffect, useState } from "react";
 import { callFetchCategory, callFetchListProduct } from "../../services/api";
 import { useNavigate, useOutletContext } from "react-router-dom";
 
-const loadingItem = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 11, 12, 13];
+const loadingItem = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 11, 12];
+// Style
+
+const styleLeft = {
+  // backgroundColor:' #ddd',
+  paddingLeft: "20px",
+  paddingTop: "30px",
+  color: "#7dc22a",
+  // zIndex:'-1',
+  borderRight: "1px solid #ddd",
+};
+
+const styleRight = {
+  // backgroundColor:' #ddd',
+  paddingLeft: "20px",
+  paddingTop: "30px",
+};
+
+const styleRadio = {
+  display: "flex",
+  alignItems: "center",
+  width: "100%",
+  height: "100%",
+  paddingLeft: "50px",
+  padding: "20px 30px",
+};
+
 const Home = () => {
   const [searchTerm, setSearchTerm] = useOutletContext();
   const [listCategory, setListCategory] = useState([]);
 
   const [listProduct, setListProduct] = useState([]);
   const [current, setCurrent] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(20);
   const [total, setTotal] = useState(0);
 
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingProduct, setIsLoadingProduct] = useState(false);
 
   const [filter, setFilter] = useState("");
+  const pageSizeOptions = [8, 20, 32, 44];
 
   // khi mới vào trang sẽ là phổ biến => sắp xếp theo bán được nhiều nhất
   const [sortQuery, setSortQuery] = useState("sort=sold&order=desc");
@@ -64,7 +91,7 @@ const Home = () => {
   //Call api cho sản phẩm
   useEffect(() => {
     fetchProduct();
-  }, [current, pageSize, filter, sortQuery, searchTerm]);
+  }, [current, pageSize, filter, sortQuery, searchTerm, total]);
 
   const fetchProduct = async () => {
     setIsLoadingProduct(true);
@@ -83,17 +110,17 @@ const Home = () => {
     }
     // console.log(searchTerm)
     const res = await callFetchListProduct(query);
-    console.log(res.data.data.products);
+    console.log(res.data.data);
     if (res && res.data) {
-      // console.log(res.data.data.total_pages);
+      // console.log("check total",res.data.data.total_pages);
       setListProduct(res.data.data.products);
-      setTotal(res.data.data.total_pages);
+      setTotal((res.data.data.products.length) *(res.data.data.total_pages) );
     }
     setIsLoadingProduct(false);
   };
-
+  console.log("check total",total);
   const handleChangeFilter = (changedValues, values) => {
-    console.log(">>> check handleChangeFilter", changedValues, values);
+    // console.log(">>> check handleChangeFilter", changedValues, values);
 
     if (changedValues.category) {
       const cate = values.category;
@@ -106,6 +133,7 @@ const Home = () => {
   };
 
   const handleOnChangePage = (pagination) => {
+    console.log("check ham handle change page", pagination);
     if (pagination && pagination.current !== current) {
       setCurrent(pagination.current);
     }
@@ -120,7 +148,7 @@ const Home = () => {
   const handleClick = async (item) => {
     // const res = await callProductImg(item.images[0].image_url);
     console.log(res);
-     navigate(`/product/${item._id}`);
+    navigate(`/product/${item._id}`);
   };
   // const onFinish = (values) => {};
 
@@ -146,31 +174,6 @@ const Home = () => {
     },
   ];
 
-  // Style
-
-  const styleLeft = {
-    // backgroundColor:' #ddd',
-    paddingLeft: "20px",
-    paddingTop: "30px",
-    color: "#7dc22a",
-    // zIndex:'-1',
-    borderRight: "1px solid #ddd",
-  };
-
-  const styleRight = {
-    // backgroundColor:' #ddd',
-    paddingLeft: "20px",
-    paddingTop: "30px",
-  };
-
-  const styleRadio = {
-    display: "flex",
-    alignItems: "center",
-    width: "100%",
-    height: "100%",
-    paddingLeft: "50px",
-    padding: "20px 50px",
-  };
   return (
     <div className="homepage-container">
       <Row gutter={[20, 20]}>
@@ -181,7 +184,7 @@ const Home = () => {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              padding: "30px 20px",
+              padding: "20px 20px",
             }}
           >
             <span
@@ -211,8 +214,7 @@ const Home = () => {
           >
             <Form.Item name="category">
               <Radio.Group>
-                <Space direction="vertical">
-                  <Row>
+                  <Row className="category-scroll" style={{}}>
                     {listCategory?.map((item, index) => (
                       <Col span={24} key={index}>
                         <Radio
@@ -225,7 +227,6 @@ const Home = () => {
                       </Col>
                     ))}
                   </Row>
-                </Space>
               </Radio.Group>
             </Form.Item>
           </Form>
@@ -325,11 +326,15 @@ const Home = () => {
               current={current}
               pageSize={pageSize}
               showSizeChanger="true"
+              showQuickJumper
               onChange={(p, s) =>
                 handleOnChangePage({ current: p, pageSize: s })
               }
-              total={total}
-              responsive
+              pageSizeOptions={pageSizeOptions}
+              total={50}
+              // responsive
+              defaultCurrent={1}
+              showTotal={() => (total/pageSize > 1 ? `${total/pageSize} pages` :`${total/pageSize} page` )}
             />
           </Row>
         </Col>
