@@ -41,7 +41,7 @@ const ManageInfo = () => {
       // Map form values to appropriate user data properties
       full_name: values.full_name,
       email: values.email,
-      date_of_birth: values.dateofbirth.toString(),
+      date_of_birth: values.dateofbirth,
       address: values.address,
       // ... other user data properties (if applicable)
     };
