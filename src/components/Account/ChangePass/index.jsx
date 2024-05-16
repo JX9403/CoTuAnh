@@ -55,7 +55,7 @@ const ChangePass = () => {
                 { required: true, message: "Không được để trống!" },
               ]}
             >
-              <Input.Password />
+              <Input.Password autoComplete="off" />
             </Form.Item>
 
             <Form.Item
@@ -66,7 +66,7 @@ const ChangePass = () => {
                 { required: true, message: "Không được để trống!" },
               ]}
             >
-              <Input.Password />
+              <Input.Password autoComplete="off" />
             </Form.Item>
 
             <div className="btn">

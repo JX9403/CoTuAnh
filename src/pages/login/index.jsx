@@ -5,6 +5,7 @@ import "./login.scss";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { doLoginAction } from "../../redux/account/accountSlice";
+import { doAllCartById } from "../../redux/order/orderSlice";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -22,18 +23,18 @@ const LoginPage = () => {
     if (res?.data.data) {
       // lưu dữ token vào localstorage
       localStorage.setItem("access_token", res.data.data.access_token);
-      dispatch(doLoginAction(res.data.data.user))
+      dispatch(doLoginAction(res.data.data.user));
       message.success("Đăng nhập tài khoản thành công!");
-      console.log("check user sau khi dang nhap", res.data.data.user)
-
-      // Chuyển hướng phân quyền 
-      if(res.data.data.user.role === "ADMIN"){
-        navigate("/admin")
+      console.log("check du lieu local nhan duoc",localStorage.getItem(`cart_${res.data.data.user.id}`) )
+      dispatch(
+        doAllCartById(JSON.parse(localStorage.getItem(`cart_${res.data.data.user.id}`)))
+      );
+      // Chuyển hướng phân quyền
+      if (res.data.data.user.role === "ADMIN") {
+        navigate("/admin");
       } else {
-        navigate("/")
+        navigate("/");
       }
-
-      
     } else {
       notification.error({
         message: "Có lỗi xảy ra",
@@ -42,7 +43,7 @@ const LoginPage = () => {
       });
     }
   };
- 
+
   return (
     <div className="login-page">
       <main className="main">
@@ -103,3 +104,4 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
+

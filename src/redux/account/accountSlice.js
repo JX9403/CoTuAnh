@@ -28,7 +28,7 @@ export const doUpdateAccountAction = createAsyncThunk(
       console.log("check data redux nhận được",updatedUserData);
 
       const response = await callUpdateInfo(updatedUserData);
-      // console.log("check data sau khi call api", response.data.data);
+      console.log("check data sau khi call api", response.data.data);
 
       
       if (response.status === 200) {

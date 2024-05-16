@@ -27,7 +27,9 @@ import LayoutAccount from "./components/Account/LayoutAccount";
 import ChangePass from "./components/Account/ChangePass";
 import ManageInfoAdmin from "./components/Admin/ManageInfoAdmin";
 import ClientTable from "./components/Admin/User/Client/ClientTable";
-
+import Cart from "./pages/cart";
+import Pay from "./pages/pay";
+import OrderDetails from "./components/Account/HistoryOrder/OrderDetails";
 
 const Layout = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -91,6 +93,23 @@ export default function App() {
           element: <ProductPage />,
         },
         {
+          path: "/cart",
+          element: (
+            <ProtectedRoute>
+              <Cart />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "/pay",
+          element: (
+            <ProtectedRoute>
+              <Pay />
+            </ProtectedRoute>
+          ),
+        },
+
+        {
           path: "account",
           element: (
             <ProtectedRoute>
@@ -101,6 +120,10 @@ export default function App() {
             {
               path: "order",
               element: <HistoryOrder />,
+             
+            },{
+              path: "order/:id",
+              element: <OrderDetails />,
             },
 
             {

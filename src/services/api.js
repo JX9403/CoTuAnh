@@ -32,7 +32,7 @@ export const callFetchAccount = () => {
 };
 
 export const callUpdateInfo = async (updatedUserData) => {
-  // console.log("check data gửi sang call api", updatedUserData);
+  console.log("check data gửi sang call api", updatedUserData);
   const { full_name, email, date_of_birth, address } = updatedUserData;
   const response = await axios.put("/api/v1/users/details", {
     full_name,
@@ -40,7 +40,7 @@ export const callUpdateInfo = async (updatedUserData) => {
     date_of_birth,
     address,
   });
-  // console.log("check data sau khi call api", response);
+  console.log("check data sau khi call api", response);
   return response;
 };
 
@@ -56,6 +56,10 @@ export const callChangePassword = async (password, new_password) => {
 
 export const callListOrder = () => {
   return axios.get("/api/v1/orders/history");
+};
+
+export const callFetchOrderDetails = (id) => {
+  return axios.get(`/api/v1/orders/${id}`);
 };
 
 // Call manager user
@@ -135,6 +139,8 @@ export const callFetchListOrder = (query) => {
   return axios.get(`/api/v1/book?${query}`);
 };
 
+
+
 export const callProductImg = (img) => {
   return axios.get(`/api/v1/productImage/${img}`);
 };
@@ -142,10 +148,39 @@ export const callProductImg = (img) => {
 export const callCommentProduct = async (comment) => {
   console.log("check data gửi sang call api", comment);
   const { user_id, product_id, content, star } = comment;
-  console.log({ user_id, product_id, content, star})
+  console.log({ user_id, product_id, content, star });
   const response = await axios.post("/api/v1/comments", {
-    user_id, product_id, content, star
+    user_id,
+    product_id,
+    content,
+    star,
   });
   // console.log("check data sau khi call api", response);
   return response;
+};
+
+export const callPlaceOrder = async (data) => {
+  const {
+    user_id,
+    payment_method,
+    payment_status,
+    shipping_address,
+    shipping_date,
+    order_details,
+  } = data;
+
+  console.log("check data nhan duoc ", data);
+  const response = await axios.post("/api/v1/orders", {
+    user_id,
+    payment_method,
+    payment_status,
+    shipping_address,
+    shipping_date,
+    order_details,
+  });
+  return response;
+};
+
+export const callProductById = (id) => {
+  return axios.get(`/api/v1/products/${id}`);
 };

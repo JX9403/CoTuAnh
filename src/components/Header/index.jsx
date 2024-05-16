@@ -15,12 +15,17 @@ import "./header.scss";
 import { doLogoutAction } from "../../redux/account/accountSlice";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { doAllCartById, removeCart } from "../../redux/order/orderSlice";
+
 const Header = (props) => {
   const [openDrawer, setOpenDrawer] = useState(false);
   const isAuthenticated = useSelector((state) => state.account.isAuthenticated);
   const user = useSelector((state) => state.account.user);
-
+  const carts = useSelector((state) => state.order.carts);
   const [input, setInput] = useState("");
+
+  console.log("check user tu header", user);
+  console.log("check cart tu header", carts);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -43,10 +48,14 @@ const Header = (props) => {
   };
 
   const handleLogout = async () => {
+    localStorage.setItem(`cart_${user.id}`,JSON.stringify(carts));
+    dispatch(doAllCartById([]))
     dispatch(doLogoutAction());
     message.success("Đăng xuất thành công");
     navigate("/");
   };
+
+
   let items = [
     {
       label: <Link to="/account">Quản lý tài khoản</Link>,
@@ -113,9 +122,18 @@ const Header = (props) => {
 
           <div className="header__icon">
             <div className="header__cart">
-              <Badge count={5} size={"small"}>
-                <FiShoppingCart className="icon-cart" />
-              </Badge>
+              <button
+                style={{
+                  background: "#fff",
+                  border: "none",
+                  boxShadow: "none",
+                }}
+                onClick={() => navigate("/cart")}
+              >
+                <Badge count={carts?.length ?? 0} size={"small"}>
+                  <FiShoppingCart className="icon-cart" />
+                </Badge>
+              </button>
             </div>
             <div className="header__account">
               {!isAuthenticated ? (

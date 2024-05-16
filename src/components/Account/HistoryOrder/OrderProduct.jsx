@@ -1,6 +1,17 @@
-import { Button, Col, Divider, Form, Input, Modal, Rate, Row } from "antd";
+import {
+  Button,
+  Col,
+  Divider,
+  Form,
+  Input,
+  Modal,
+  Rate,
+  Row,
+  message,
+  notification,
+} from "antd";
 import { useForm } from "antd/es/form/Form";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { callCommentProduct } from "../../../services/api";
 
 export default function OrderProduct(props) {
@@ -9,6 +20,7 @@ export default function OrderProduct(props) {
   const user = props.user;
   // console.log("check prop", orderItem);
 
+  const [isDisable, setIsDisable] = useState();
   const [showModal, setShowModal] = useState(false);
 
   const handleButtonClick = () => {
@@ -16,10 +28,27 @@ export default function OrderProduct(props) {
   };
 
   const onFinish = async (values) => {
-    values = { ...values, user_id: user.id, product_id: orderItem.product_response.product_id };
+    values = {
+      ...values,
+      user_id: user.id,
+      product_id: orderItem.product_response.product_id,
+    };
     const res = await callCommentProduct(values);
-    console.log("check res call comment", res)
+    console.log("check res call comment", res);
+
+    if (res && res.data.data) {
+      message.success("Đánh giá thành công!");
+      setShowModal(false);
+      setIsDisable(true);
+    } else {
+      notification.error({
+        message: "Đã có lỗi xảy ra",
+        description: res.data.message,
+      });
+    }
   };
+
+  
 
   return (
     <>
@@ -45,6 +74,7 @@ export default function OrderProduct(props) {
             type="primary"
             onClick={handleButtonClick}
             size="small"
+            disabled={isDisable}
           >
             Đánh giá
           </Button>

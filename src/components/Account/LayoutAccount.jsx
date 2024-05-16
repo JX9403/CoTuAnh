@@ -22,7 +22,7 @@ const LayoutAccount = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [activeMenu, setActiveMenu] = useState("dashboard");
   const user = useSelector((state) => state.account.user);
-// console.log("check user vào quản lý tài khoản",user)
+  // console.log("check user vào quản lý tài khoản",user)
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -33,11 +33,14 @@ const LayoutAccount = () => {
   const hideModal = () => {
     setOpen(false);
   };
+
   const handleLogout = async () => {
+    localStorage.setItem(`cart_${user.id}`, JSON.stringify(carts));
+    dispatch(doAllCartById([]));
     dispatch(doLogoutAction());
     message.success("Đăng xuất thành công");
     navigate("/");
-};
+  };
   const items = [
     {
       label: <label>Hồ sơ</label>,
@@ -114,13 +117,11 @@ const LayoutAccount = () => {
           />
         </Sider>
 
-
         <Layout>
           <Content>
             <Outlet />
           </Content>
         </Layout>
-
 
         <Modal
           width={"500px"}

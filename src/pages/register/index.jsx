@@ -1,5 +1,6 @@
 import {
   Button,
+  DatePicker,
   Divider,
   Form,
   Input,
@@ -12,19 +13,24 @@ import { Link, useNavigate } from "react-router-dom";
 import { callRegister } from "../../services/api";
 import "./register.scss";
 
+const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY', 'DD-MM-YYYY', 'DD-MM-YY'];
+
 const RegisterPage = () => {
   const navigate = useNavigate();
   const [isSubmit, setIsSubmit] = useState(false);
 
   const onFinish = async (values) => {
     values = {
-      ...values,
+      full_name : values.full_name,
+      email : values.email,
+      password : values.password,
+      phone_number : values.phone_number,
       role: "USER",
-      address: "",
-      date_of_birth: "",
-      avatar: "",
+      address : values.address,
+      date_of_birth : values.dateofbirth.toString(),
+      avatar:"",
     };
-    console.log(values);
+    console.log( "check value gui di",values);
     const {
       full_name,
       email,
@@ -36,8 +42,8 @@ const RegisterPage = () => {
       avatar,
     } = values;
     // console.log(values);
-     setIsSubmit(true);
-     // const role = 'USER'
+    setIsSubmit(true);
+    // const role = 'USER'
     const res = await callRegister(
       full_name,
       email,
@@ -50,17 +56,19 @@ const RegisterPage = () => {
     );
     console.log(res);
     setIsSubmit(false);
-    console.log(res)
+    console.log(res);
     if (res?.data?.data?.id) {
-        message.success('Đăng ký tài khoản thành công!');
-        navigate('/login')
+      message.success("Đăng ký tài khoản thành công!");
+      navigate("/login");
     } else {
-        notification.error({
-            message: "Có lỗi xảy ra",
-            description:
-                res.data.message && Array.isArray( res.data.message) ?  res.data.message : res.data.message,
-            duration: 5
-        })
+      notification.error({
+        message: "Có lỗi xảy ra",
+        description:
+          res.data.message && Array.isArray(res.data.message)
+            ? res.data.message
+            : res.data.message,
+        duration: 5,
+      });
     }
   };
 
@@ -89,7 +97,28 @@ const RegisterPage = () => {
               >
                 <Input />
               </Form.Item>
-
+              <Form.Item
+              style={{width:'100%'}}
+                label="Ngày sinh"
+                labelCol={{ span: 24 }}
+                name="dateofbirth"
+              >
+                 <DatePicker style={{width:'100%'}} format={dateFormatList} />
+                
+              </Form.Item>
+              <Form.Item
+                labelCol={{ span: 24 }} //whole column
+                label="Số điện thoại"
+                name="phone_number"
+                rules={[
+                  {
+                    required: true,
+                    message: "Số điện thoại không được để trống!",
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
               <Form.Item
                 labelCol={{ span: 24 }} //whole column
                 label="Email"
@@ -111,18 +140,16 @@ const RegisterPage = () => {
               >
                 <Input.Password />
               </Form.Item>
+
               <Form.Item
                 labelCol={{ span: 24 }} //whole column
-                label="Số điện thoại"
-                name="phone_number"
+                label="Địa chỉ"
+                name="address"
                 rules={[
-                  {
-                    required: true,
-                    message: "Số điện thoại không được để trống!",
-                  },
+                  { required: true, message: "Địa chỉ không được để trống!" },
                 ]}
               >
-                <Input />
+                <Input  />
               </Form.Item>
 
               <Form.Item

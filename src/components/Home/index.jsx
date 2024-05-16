@@ -110,7 +110,7 @@ const Home = () => {
     }
     // console.log(searchTerm)
     const res = await callFetchListProduct(query);
-    console.log(res.data.data);
+    // console.log(res.data.data);
     if (res && res.data) {
       // console.log("check total",res.data.data.total_pages);
       setListProduct(res.data.data.products);
@@ -118,7 +118,7 @@ const Home = () => {
     }
     setIsLoadingProduct(false);
   };
-  console.log("check total",total);
+  // console.log("check total",total);
   const handleChangeFilter = (changedValues, values) => {
     // console.log(">>> check handleChangeFilter", changedValues, values);
 
@@ -146,9 +146,7 @@ const Home = () => {
   const navigate = useNavigate();
 
   const handleClick = async (item) => {
-    // const res = await callProductImg(item.images[0].image_url);
-    console.log(res);
-    navigate(`/product/${item._id}`);
+    navigate(`/product/${item.product_id}`);
   };
   // const onFinish = (values) => {};
 
@@ -295,12 +293,12 @@ const Home = () => {
                             {/* https://backend-online-supermarket-sales-website.onrender.com/api/v1/productImages/${item.images[0].image_url} */}
                           </div>
                           <div className="bottom">
-                            <div className="text">{item.product_name}</div>
+                            <div className="title">{item.product_name}</div>
                             <div className="price">
                               {new Intl.NumberFormat("vi-VN", {
                                 style: "currency",
                                 currency: "VND",
-                              }).format(item.price)}
+                              }).format(item.price) + `/${item.unit}`}
                             </div>
                             <div className="rating">
                               <Rate
@@ -331,10 +329,10 @@ const Home = () => {
                 handleOnChangePage({ current: p, pageSize: s })
               }
               pageSizeOptions={pageSizeOptions}
-              total={50}
+              total={total}
               // responsive
               defaultCurrent={1}
-              showTotal={() => (total/pageSize > 1 ? `${total/pageSize} pages` :`${total/pageSize} page` )}
+              showTotal={() => (Math.ceil(total/pageSize) > 1 ? `${Math.ceil(total/pageSize)} pages` :`${Math.ceil(total/pageSize)} page` )}
             />
           </Row>
         </Col>
