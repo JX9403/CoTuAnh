@@ -30,25 +30,17 @@
 
   &-d2 {
     width: 1200px;
-    height: 160px;
-    background-color: #fff;
+    background: #fff;
     margin: 20px 120px 0px 120px;
-    display: flex;
-    flex-direction: column;
-
+    padding: 20px;
+   
     &-row1 {
       display: flex;
       color: #5eb600;
-      margin: 20px 0px 0px 60px;
       height: 30px;
       align-items: center;
 
       &-icon {
-        // i {
-        //     padding: 0px 0px 0px 0px;
-        //     margin: 0px 0px 0px 0px;
-
-        // }
         &-loca {
           height: 2em;
           width: 2em;
@@ -66,66 +58,25 @@
     }
 
     &-row2 {
-      display: flex;
-
+      
       &-column1 {
-        width: 170px;
-        margin: 20px 0px 0px 60px;
-        color: #000;
-        font-family: Montserrat;
-        font-size: 16px;
-        font-style: normal;
+        margin: 20px 0px 0px 40px;
+        font-size: 20px;
         font-weight: 400;
         line-height: 30px;
       }
 
       &-column2 {
-        margin: 20px 0px 0px 60px;
-        width: 610px;
+        margin: 10px 0px 0px 40px;
         color: #000;
         font-family: Montserrat;
-        font-size: 16px;
+        font-size: 20px;
         font-style: normal;
-        font-weight: 400;
         line-height: 30px;
-      }
-
-      &-column3 {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        :hover {
-          background-color: #427a06;
-          color: #fff;
-        }
-
-        button {
-          margin: 20px 0px 0px 100px;
-          display: flex;
-          width: 110px;
-          height: 40px;
-          padding: 10px 0px;
-          justify-content: center;
-          align-items: center;
-          border-radius: 10px;
-          border: 1px solid #427a06;
-          background-color: #fff;
-          color: #427a06;
-          font-family: Montserrat;
-          font-size: 16px;
-          font-style: normal;
-          font-weight: 400;
-          line-height: normal;
-
-          :hover {
-            background-color: #427a06;
-            color: #fff;
-          }
-        }
       }
     }
   }
+
 
   &-d3 {
     width: 1200px;
@@ -417,7 +368,7 @@
   &-d5 {
     display: flex;
     width: 100%;
-    height: 361px;
+    height: 320px;
     padding: 30px 120px 30px 920px;
     background: #fff;
     box-shadow: -5px -5px 30px 1px rgba(0, 0, 0, 0.25);
@@ -432,6 +383,7 @@
       font-style: normal;
       font-weight: 400;
       line-height: 20px;
+      margin-bottom: 20px;
     }
 
     &-row2 {
@@ -492,13 +444,13 @@
     }
 
     &-row5 {
-      margin: 40px 0px 0px 0px;
-
+      display: flex;
+      margin: 30px auto;
+      justify-content: center;
       button {
         display: flex;
-        width: 200px;
-        height: 55px;
-        padding: 10px 29px;
+        width: 120px;
+        height: 45px;
         justify-content: center;
         align-items: center;
         border: 1px solid #427a06;
@@ -508,8 +460,13 @@
         font-size: 16px;
         font-style: normal;
         font-weight: 700;
-        line-height: normal;
         border-radius: 10px;
+      }
+      .btn1 {
+        background-color: #fff;
+        color: #5eb600;
+        border: 1px solid #5eb600;
+        margin-right: 10px;
       }
     }
   }

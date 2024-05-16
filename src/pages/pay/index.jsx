@@ -22,7 +22,7 @@ function Pay() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   //   const user = useSelector((state) => state.account.user);
-  // console.log("check user trong thanh toan ",user);
+  console.log("check cart trong thanh toan ",getCart);
   useEffect(() => {
     if (getCart) {
       const total = getCart.reduce(
@@ -93,6 +93,9 @@ function Pay() {
     },
   ];
 
+  const handlePlaceCancel = () => {
+    navigate("/cart");
+  };
   return (
     <>
       <div className="pay">
@@ -114,17 +117,20 @@ function Pay() {
 
             {getUser && (
               <div className="pay-d2-row2">
-                <div className="pay-d2-row2-column1">
-                  <div className="pay-d2-row2-column1-p1">
+                <div>
+                  <div className="pay-d2-row2-column2">
                     Tên khách hàng : {getUser.full_name}
                   </div>
-                  <div className="pay-d2-row2-column1-p2">
+                  <div className="pay-d2-row2-column2">
                     Số điện thoại : {getUser.phone_number}
                   </div>
                 </div>
                 <div className="pay-d2-row2-column2">
-                  Địa chỉ nhận hàng :
-                  <Input
+                  <div> Địa chỉ nhận hàng :</div>
+
+                  <Input.TextArea
+                    style={{ marginTop: "20px", width: "40%" }}
+                    rows={4}
                     defaultValue={newAddress}
                     onChange={(e) => handleAddress(e)}
                   />
@@ -251,7 +257,12 @@ function Pay() {
             </div>
           </div>
           <div className="pay-d5-row5">
-            <button onClick={handlePlaceOrder}>Đặt hàng</button>
+            <button className="btn1" onClick={handlePlaceCancel}>
+              Hủy
+            </button>
+            <button className="btn2" onClick={handlePlaceOrder}>
+              Đặt hàng
+            </button>
           </div>
         </div>
       </div>

@@ -34,6 +34,7 @@ export const orderSlice = createSlice({
         state.carts.push({
           ...action.payload.product,
           soluong: action.payload.soluong,
+          
         });
         message.success("Success");
       }

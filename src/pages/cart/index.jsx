@@ -236,11 +236,6 @@ function Cart() {
                 getCart.map((product, index) => (
                   <div className="cart-d2-row" key={product.product_id}>
                     <div className="cart-d2-row-column1">
-                      {/* <input
-                  type="checkbox"
-                  onChange={(e) => onChangeCartCheckbox(product._id, e)}
-                  className="custom-checkbox"
-                /> */}
                       <Checkbox
                         onChange={(e) =>
                           onChangeCartCheckbox(product.product_id, e)
@@ -290,17 +285,14 @@ function Cart() {
                     </div>
                   </div>
                 ))}
-              {/* {cart.length === 0 &&
-            <div className='order-product-empty'>
-              <Empty description={"Không có sản phẩm nào trong giỏ hàng"}></Empty>
-            </div>
-          } */}
             </div>
           </>
         ) : (
           <>
             <Empty description="Chưa có sản phẩm nào trong giỏ hàng!">
-              <Button type="primary" onClick={() => navigate("/home")}>Mua ngay</Button>
+              <Button type="primary" onClick={() => navigate("/home")}>
+                Mua ngay
+              </Button>
             </Empty>
           </>
         )}
@@ -309,12 +301,6 @@ function Cart() {
       <div className="final">
         <div className="final-row1">
           <div className="final-row1-column1">
-            {/* <input
-              type="checkbox"
-              // onChange={(e) => selectAll(e.target.checked)}
-              // checked={selectAllChecked} // Đặt giá trị checked của checkbox chọn tất cả
-              className="custom-checkbox"
-            /> */}
             <Checkbox
               checked={selectAllChecked}
               onChange={(e) => selectAll(e.target.checked)}
