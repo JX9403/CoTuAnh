@@ -13,6 +13,14 @@
     &:hover {
       box-shadow: #7dc22a 0px 2px 8px 0px;
     }
+    .row-hover{
+      border-radius: 10px;
+      font-weight: 700;
+      transition: all 0.3s;
+    }
+    .row-hover:hover{
+      color: #46b91d;
+    }
   }
   .item {
     &-product{

@@ -22,13 +22,18 @@ function Pay() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   //   const user = useSelector((state) => state.account.user);
-  console.log("check cart trong thanh toan ",getCart);
+  console.log("check cart trong thanh toan ", getCart);
+
   useEffect(() => {
     if (getCart) {
-      const total = getCart.reduce(
+      const filteredCart = getCart.filter(
+        (product) => product.checkchoose === 1
+      );
+      const total = filteredCart.reduce(
         (acc, product) => acc + product.soluong * product.price,
         0
       );
+      // const total = getCart.reduce((acc, product) => acc + product.soluong * product.price, 0);
       setTotalPrice(total);
     }
   }, [getCart]);
@@ -40,12 +45,12 @@ function Pay() {
 
   const handlePlaceOrder = async () => {
     // 1. Create order data object
-    const orderData = getCart.map((item) => {
-      return {
-        product_id: item.product_id,
+    const orderData = getCart
+      .filter((product) => product.checkchoose === 1)
+      .map((item) => ({
         number_of_products: item.soluong,
-      };
-    });
+        product_id: item.product_id,
+      }));
 
     const data = {
       user_id: getUser.id,
@@ -55,10 +60,10 @@ function Pay() {
       shipping_date: Date.now(),
       order_details: orderData,
     };
-    // console.log("Check data thanh toan gui sang api", data);
+    console.log("Check data thanh toan gui sang api", data);
 
     const res = await callPlaceOrder(data);
-    // console.log("Check res sau khi call api", res);
+    console.log("Check res sau khi call api", res);
 
     if (res && res.data.data) {
       message.success("Đặt hàng thành công!");
@@ -148,28 +153,37 @@ function Pay() {
 
             <div className="pay-d3-row2">
               {getCart &&
-                getCart.map((product, index) => (
-                  <div className="pay-d3-row2-wrap" key={product.product_id}>
-                    <div className="pay-d3-row2-wrap-column1">
-                      <img
-                        src={product.images[0].image_url}
-                        alt={product.product_name}
-                      />
-                    </div>
-                    <div className="pay-d3-row2-wrap-column2">
-                      {product.product_name}
-                    </div>
-                    <div className="pay-d3-row2-wrap-column3">
-                      <div>{product.soluong}</div>
-                    </div>
-                    <div className="pay-d3-row2-wrap-column4">
-                      <div>{product.price}đ</div>
-                    </div>
-                    <div className="pay-d3-row2-wrap-column5">
-                      <div>{product.price * product.soluong}đ</div>
-                    </div>
-                  </div>
-                ))}
+                getCart.map((product, index) => {
+                  if (product && product.checkchoose === 1) {
+                    return (
+                      <div
+                        className="pay-d3-row2-wrap"
+                        key={product.product_id}
+                      >
+                        <div className="pay-d3-row2-wrap-column1">
+                          <img
+                            src={product.images[0].image_url}
+                            alt={product.product_name}
+                          />
+                        </div>
+                        <div className="pay-d3-row2-wrap-column2">
+                          {product.product_name}
+                        </div>
+                        <div className="pay-d3-row2-wrap-column3">
+                          <div>{product.soluong}</div>
+                        </div>
+                        <div className="pay-d3-row2-wrap-column4">
+                          <div>{product.price}đ</div>
+                        </div>
+                        <div className="pay-d3-row2-wrap-column5">
+                          <div>{product.price * product.soluong}đ</div>
+                        </div>
+                      </div>
+                    );
+                  } else {
+                    return null;
+                  }
+                })}
             </div>
           </div>
 

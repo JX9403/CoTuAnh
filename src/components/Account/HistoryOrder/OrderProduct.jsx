@@ -19,13 +19,42 @@ export default function OrderProduct(props) {
   const orderItem = props.orderItem;
   const user = props.user;
   // console.log("check prop", orderItem);
-
-  const [isDisable, setIsDisable] = useState();
+  const [isComment, setIsComment] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
   const handleButtonClick = () => {
     setShowModal(true);
   };
+
+
+
+  function maskName(name) {
+    name = name.split(" ");
+    return name
+      .map((word, index) => {
+        if (index === name.length - 1) {
+          // Giữ nguyên từ đầu và cuối
+          return word;
+        }
+        return word[0] + "*".repeat(word.length - 1); // Thay thế các ký tự bằng dấu *
+      })
+      .join(" ");
+  }
+
+  useEffect(() => {
+    const checkComments = async () => {
+      if (orderItem.product_response.comments?.length) {
+        const foundComment = orderItem.product_response.comments.find(
+          (comment) => comment.username === maskName(user.full_name)
+        );
+        setIsComment(!!foundComment); // Set isComment based on comment existence
+      }
+    };
+
+    checkComments();
+  }, [orderItem.product_response.comments, user.full_name]);
+
+
 
   const onFinish = async (values) => {
     values = {
@@ -39,7 +68,7 @@ export default function OrderProduct(props) {
     if (res && res.data.data) {
       message.success("Đánh giá thành công!");
       setShowModal(false);
-      setIsDisable(true);
+      setIsComment(true);
     } else {
       notification.error({
         message: "Đã có lỗi xảy ra",
@@ -47,8 +76,6 @@ export default function OrderProduct(props) {
       });
     }
   };
-
-  
 
   return (
     <>
@@ -74,7 +101,7 @@ export default function OrderProduct(props) {
             type="primary"
             onClick={handleButtonClick}
             size="small"
-            disabled={isDisable}
+            disabled={isComment}
           >
             Đánh giá
           </Button>

@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  changeCheckchoose,
   changeQuantity,
   removeCart,
   removeProduct,
@@ -22,15 +23,25 @@ function Cart() {
   const dispatch = useDispatch();
 
   const getCart = useSelector((state) => state.order.carts);
-  //hàm tính tổng thanh toán
-  // const totalPrice = getCart.reduce((total, item) => {
-  //   return total + item?.soluong * Number(item?.price)
 
-  // }, 0)
+  // const calculateTotalPrice = () => {
+  //   let totalPrice = 0;
+  //   getCart.forEach((product) => {
+  //     if (selectedProducts[product.product_id]) {
+  //       // totalPrice += product.price * product.soluong;
+  //       totalPrice +=
+  //         product.price * (quantities[product.product_id] || product.soluong);
+  //     }
+  //   });
+
+  //   return totalPrice;
+  // };
+
   const calculateTotalPrice = () => {
     let totalPrice = 0;
     getCart.forEach((product) => {
-      if (selectedProducts[product.product_id]) {
+      // if (selectedProducts[product._id]) {
+      if (product.checkchoose === 1) {
         // totalPrice += product.price * product.soluong;
         totalPrice +=
           product.price * (quantities[product.product_id] || product.soluong);
@@ -39,16 +50,6 @@ function Cart() {
 
     return totalPrice;
   };
-
-  // const calculateTotalPrice = () => {
-  //   let totalPrice = 0;
-  //   getCart.reduce((total, item) => {
-  //     if (selectedProducts[item]) {
-  //       totalPrice += item?.soluong * Number(item?.price)
-  //     }
-  //   });
-  //   return totalPrice;
-  // };
 
   const [totalPrice, setTotalPrice] = useState(0);
 
@@ -151,6 +152,7 @@ function Cart() {
   };
 
   //Chọn tất cả checkbox trong cart-d2
+
   const selectAll = (checked) => {
     setSelectedProducts(
       getCart.reduce((acc, product) => {
@@ -159,6 +161,11 @@ function Cart() {
       }, {})
     ); // Create new selectedProducts object with all products set to checked
     setSelectAllChecked(checked); // Update state for select all checkbox
+    getCart.forEach((product) => {
+      dispatch(
+        changeCheckchoose({ _id: product._id, checkchoose: checked ? 1 : 0 })
+      );
+    });
   };
 
   //Tich chon tat ca
@@ -171,13 +178,21 @@ function Cart() {
   };
 
   //Chon cart-d2
+
+
   const onChangeCartCheckbox = (productId, e) => {
+   
     const checked = e.target.checked;
-    setSelectedProducts((prevSelectedProducts) => ({
+
+    setSelectedProducts(prevSelectedProducts => ({
       ...prevSelectedProducts,
-      [productId]: checked,
+      [productId]: checked
+
     }));
+ 
+    dispatch(changeCheckchoose({ product_id: productId, checkchoose: checked ? 1 : 0 }));
   };
+
 
   useEffect(() => {
     // Update cart-d2 checkbox states based on select all checkbox

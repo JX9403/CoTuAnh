@@ -15,19 +15,25 @@ import "./header.scss";
 import { doLogoutAction } from "../../redux/account/accountSlice";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { doAllCartById, removeCart } from "../../redux/order/orderSlice";
+import { changeCheckchoose, doAllCartById, removeCart } from "../../redux/order/orderSlice";
 
 const Header = (props) => {
   const [openDrawer, setOpenDrawer] = useState(false);
   const isAuthenticated = useSelector((state) => state.account.isAuthenticated);
   const user = useSelector((state) => state.account.user);
-  const carts = useSelector((state) => state.order.carts);
+  const getCart = useSelector((state) => state.order.carts);
   const [input, setInput] = useState("");
 
   console.log("check user tu header", user);
-  console.log("check cart tu header", carts);
+  console.log("check cart tu header", getCart);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const updateCheckchoose = () => {
+    getCart?.forEach((product) => {
+      dispatch(changeCheckchoose({ product_id: product.product_id, checkchoose: 1 }));
+    });
+  };
 
   const handleChange = (e) => {
     setInput(e.target.value);
@@ -48,13 +54,12 @@ const Header = (props) => {
   };
 
   const handleLogout = async () => {
-    localStorage.setItem(`cart_${user.id}`,JSON.stringify(carts));
-    dispatch(doAllCartById([]))
+    localStorage.setItem(`cart_${user.id}`, JSON.stringify(getCart));
+    dispatch(doAllCartById([]));
     dispatch(doLogoutAction());
     message.success("Đăng xuất thành công");
     navigate("/");
   };
-
 
   let items = [
     {
@@ -128,9 +133,11 @@ const Header = (props) => {
                   border: "none",
                   boxShadow: "none",
                 }}
-                onClick={() => navigate("/cart")}
+                onClick={() => {
+                  navigate("/cart"), updateCheckchoose();
+                }}
               >
-                <Badge count={carts?.length ?? 0} size={"small"}>
+                <Badge count={getCart?.length ?? 0} size={"small"}>
                   <FiShoppingCart className="icon-cart" />
                 </Badge>
               </button>

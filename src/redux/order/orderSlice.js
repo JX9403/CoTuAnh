@@ -34,7 +34,6 @@ export const orderSlice = createSlice({
         state.carts.push({
           ...action.payload.product,
           soluong: action.payload.soluong,
-          
         });
         message.success("Success");
       }
@@ -60,13 +59,50 @@ export const orderSlice = createSlice({
       );
     },
     doPlaceOrderAction: (state, action) => {
-      state.carts = [];
+      state.carts = state.carts.filter(item => item.checkchoose !== 1);
     },
+
     doAllCartById: (state, action) => {
-      // console.log("check payload do all", action.payload);
+       console.log("check payload do all", action.payload);
       action.payload === null
         ? (state.carts = [])
         : (state.carts = action.payload);
+    },
+
+    doAddToPay: (state, action) => {
+      const isExist = state.carts.find(
+        (item) => item.product_id === action.payload.product.product_id
+      );
+
+      console.log("checkchoose:", action.payload.checkchoose);
+
+      if (isExist) {
+        state.carts = state.carts.map((item) => {
+          // item.soluong = 0
+          if (item.product_id === action.payload.product.product_id)
+            item.checkchoose = action.payload.checkchoose;
+
+          return item;
+        });
+        // message.success("Success");
+      } else {
+        state.carts.push({
+          ...action.payload.product,
+          checkchoose: action.payload.checkchoose,
+        });
+        // message.success("Success");
+      }
+    },
+    changeCheckchoose: (state, action) => {
+      state.carts = state.carts.map((item) => {
+        // lặp qua các item trong list cart
+        if (item.product_id === action.payload.product_id) {
+          // nếu item mà nó lặp qua = với item mà mình gửi vào
+          // item.checkchoose = item.checkchoose === 1 ? 0 : 1; // thì update
+          item.checkchoose = action.payload.checkchoose;
+        }
+        return item;
+      });
     },
   },
 });
@@ -78,5 +114,7 @@ export const {
   removeProduct,
   doPlaceOrderAction,
   doAllCartById,
+  doAddToPay,
+  changeCheckchoose,
 } = orderSlice.actions;
 export default orderSlice.reducer;

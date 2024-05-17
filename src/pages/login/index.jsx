@@ -25,9 +25,32 @@ const LoginPage = () => {
       localStorage.setItem("access_token", res.data.data.access_token);
       dispatch(doLoginAction(res.data.data.user));
       message.success("Đăng nhập tài khoản thành công!");
-      console.log("check du lieu local nhan duoc",localStorage.getItem(`cart_${res.data.data.user.id}`) )
+      if (localStorage.getItem(`cart_${res.data.data.user.id}`)) {
+        console.log(
+          "check du lieu local nhan duoc",
+          localStorage.getItem(`cart_${res.data.data.user.id}`)
+        );
+        dispatch(
+          doAllCartById(
+            JSON.parse(localStorage.getItem(`cart_${res.data.data.user.id}`))
+          )
+        );
+      } else {
+        console.log(
+          "check du lieu local nhan duoc",
+          []
+        );
+        dispatch(
+          doAllCartById(
+            []
+          )
+        );
+      }
+
       dispatch(
-        doAllCartById(JSON.parse(localStorage.getItem(`cart_${res.data.data.user.id}`)))
+        doAllCartById(
+          JSON.parse(localStorage.getItem(`cart_${res.data.data.user.id}`))
+        )
       );
       // Chuyển hướng phân quyền
       if (res.data.data.user.role === "ADMIN") {
@@ -104,4 +127,3 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
-

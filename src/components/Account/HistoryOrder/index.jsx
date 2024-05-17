@@ -74,12 +74,8 @@ const HistoryOrder = () => {
             {orderList.length > 0 ? (
               <>
                 {orderList.map((order) => (
-                  <div
-                    onClick={() => handleDetailOrder(order.id)}
-                    className="order-box"
-                    key={order.id}
-                  >
-                    <Row>
+                  <div className="order-box" key={order.id}>
+                    <Row  className='row-hover' onClick={() => handleDetailOrder(order.id)} style={{margin:'0', padding:'20px 0'}}>
                       <Col className="item-id" span={21}>
                         Mã đơn hàng : {order.id}
                       </Col>

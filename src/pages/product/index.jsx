@@ -14,7 +14,11 @@ import { BsCartPlus } from "react-icons/bs";
 import ModalGallery from "./ModalGallery";
 import { original } from "@reduxjs/toolkit";
 import { render } from "react-dom";
-import { doAddBookAction, removeCart } from "../../redux/order/orderSlice";
+import {
+  doAddBookAction,
+  doAddToPay,
+  removeCart,
+} from "../../redux/order/orderSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { callProductById } from "../../services/api";
 import Skeleton from "react-loading-skeleton";
@@ -121,6 +125,9 @@ const ProductPage = () => {
   const handleAddToCart = (product, soluong) => {
     dispatch(doAddBookAction({ product, soluong }));
   };
+  const handleAddToPay = (product, checkchoose) => {
+    dispatch(doAddToPay({ product, checkchoose }));
+  };
 
   const handleRemoveCart = () => {
     dispatch(removeCart());
@@ -220,7 +227,10 @@ const ProductPage = () => {
                   <div className="buy">
                     <button
                       className="cart"
-                      onClick={() => handleAddToCart(product, quantity)}
+                      onClick={() => {
+                        handleAddToCart(product, quantity);
+                        handleAddToPay(product, 1);
+                      }}
                     >
                       <BsCartPlus className="icon-cart" />
                       <span>Thêm vào giỏ hàng</span>
