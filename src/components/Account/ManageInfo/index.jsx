@@ -23,11 +23,11 @@ const ManageInfo = () => {
 
   function formatDate(dateString) {
     // Tách chuỗi ngày thành mảng
-    const parts = dateString.split('-');
+    const parts = dateString.split("-");
     // Đảo ngược thứ tự mảng
     parts.reverse();
     // Lấy chuỗi ngày đã format
-    const formattedDate = parts.join('-');
+    const formattedDate = parts.join("-");
     return formattedDate;
   }
 
@@ -87,8 +87,15 @@ const ManageInfo = () => {
             name="dateofbirth"
           >
             <DatePicker
+              initialValues={dayjs(
+                formatDate(user.date_of_birth.substring(0, 10)),
+                dateFormatList[0]
+              )}
               format={dateFormatList}
-              defaultValue={dayjs(formatDate(user.date_of_birth.substring(0, 10)), dateFormatList[0])}
+              defaultValue={dayjs(
+                formatDate(user.date_of_birth.substring(0, 10)),
+                dateFormatList[0]
+              )}
               disabled={!isEdit}
             />
           </Form.Item>

@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 dayjs.extend(customParseFormat);
 const dateFormatList = ["DD/MM/YYYY", "DD/MM/YY", "DD-MM-YYYY", "DD-MM-YY"];
-const ClientViewDetail = (props) => {
+const StaffViewDetail = (props) => {
   const {
     openViewDetail,
     setOpenViewDetail,
@@ -37,7 +37,7 @@ const ClientViewDetail = (props) => {
         open={openViewDetail}
         width={"50vw"}
       >
-        <Descriptions title="Thông tin khách hàng " bordered column={1}>
+        <Descriptions title="Thông tin nhân viên" bordered column={1}>
           <Descriptions.Item label="Id">{dataViewDetail?.id}</Descriptions.Item>
           <Descriptions.Item label="Tên hiển thị">
             {dataViewDetail?.full_name}
@@ -67,4 +67,4 @@ const ClientViewDetail = (props) => {
   );
 };
 
-export default ClientViewDetail;
+export default StaffViewDetail;

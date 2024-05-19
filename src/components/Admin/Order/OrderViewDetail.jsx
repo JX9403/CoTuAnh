@@ -1,6 +1,10 @@
-import { Badge, Descriptions, Divider, Drawer, Modal, Upload } from "antd";
-import { useEffect, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
+import { DatePicker, Descriptions, Drawer, Tag } from "antd";
+import { useEffect } from "react";
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+import { render } from "react-dom";
+dayjs.extend(customParseFormat);
+const dateFormatList = ["DD/MM/YYYY", "DD/MM/YY", "DD-MM-YYYY", "DD-MM-YY"];
 const OrderViewDetail = (props) => {
   const {
     openViewDetail,
@@ -11,56 +15,19 @@ const OrderViewDetail = (props) => {
 
   const onClose = () => {
     setOpenViewDetail(false);
-    setDataViewDetail(null);
   };
+  function formatDate(inputDate) {
+    const date = new Date(inputDate);
+    const day = date.getUTCDate();
+    const month = date.getUTCMonth() + 1; // Tháng tính từ 0
+    const year = date.getUTCFullYear();
 
-  // const getBase64 = (file) =>
-  //   new Promise((resolve, reject) => {
-  //     const reader = new FileReader();
-  //     reader.readAsDataURL(file);
-  //     reader.onload = () => resolve(reader.result);
-  //     reader.onerror = (error) => reject(error);
-  //   });
+    // Đảm bảo định dạng dd/mm/yyyy
+    const formattedDay = day < 10 ? `0${day}` : day;
+    const formattedMonth = month < 10 ? `0${month}` : month;
 
-  const [previewOpen, setPreviewOpen] = useState(false);
-  const [previewImage, setPreviewImage] = useState("");
-  const [previewTitle, setPreviewTitle] = useState("");
-  const [fileList, setFileList] = useState([]);
-
-  // NOTE sua duong URL image
-  useEffect(() => {
-    if (dataViewDetail) {
-      let imgThumbnail = {};
-      if (dataViewDetail.thumbnail) {
-        imgThumbnail = {
-          uid: uuidv4(),
-          name: dataViewDetail.thumbnail,
-          status: "done",
-          url: `${import.meta.env.VITE_BACKEND_URL}/images/book/${
-            dataViewDetail.thumbnail
-          }`,
-        };
-      }
-      setFileList([imgThumbnail]);
-    }
-  }, [dataViewDetail]);
-
-  const handleCancel = () => setPreviewOpen(false);
-
-  const handlePreview = async (file) => {
-    // if (!file.url && !file.preview) {
-    //   file.preview = await getBase64(file.originFileObj);
-    // }
-    setPreviewImage(file.url || file.preview);
-    setPreviewOpen(true);
-    setPreviewTitle(
-      file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
-    );
-  };
-
-  const handleChange = ({ fileList: newFileList }) => {
-    setFileList(newFileList);
-  };
+    return `${formattedDay}/${formattedMonth}/${year}`;
+  }
 
   return (
     <>
@@ -70,41 +37,74 @@ const OrderViewDetail = (props) => {
         open={openViewDetail}
         width={"50vw"}
       >
-        <Descriptions title="Thông tin sản phẩm " bordered column={1}>
-          <Descriptions.Item label="Id">
-            {dataViewDetail?._id}
+        <Descriptions labelStyle={{ width: "35%" }} title="Thông tin đơn hàng " bordered column={1}>
+          <Descriptions.Item label="Mã đơn hàng">
+            {dataViewDetail?.id}
           </Descriptions.Item>
-          <Descriptions.Item label="Tên sản phẩm">
-            {dataViewDetail?.mainText}
+
+          <Descriptions.Item label="ID khách hàng">
+            {dataViewDetail?.user_id}
           </Descriptions.Item>
-          <Descriptions.Item label="Danh mục">
-            {dataViewDetail?.category}
+
+          <Descriptions.Item label="Tổng giá trị đơn hàng">
+            {dataViewDetail?.total_money}
           </Descriptions.Item>
-          <Descriptions.Item label="Số lượng">
-            {dataViewDetail?.quantity}
+
+          <Descriptions.Item label="Phương thức thanh toán">
+            {dataViewDetail?.payment_method}
           </Descriptions.Item>
-          <Descriptions.Item label="Mô tả">
-            {dataViewDetail?.author}
+
+          <Descriptions.Item label="Địa chỉ nhận hàng">
+            {dataViewDetail?.shipping_address}
+          </Descriptions.Item>
+
+          <Descriptions.Item label="Trạng thái thanh toán">
+            {dataViewDetail?.payment_status === "Đã thanh toán" ? (
+              <Tag color="green" key={dataViewDetail?.payment_status}>
+                {dataViewDetail?.payment_status?.toUpperCase()}
+              </Tag>
+            ) : (
+              <>
+                <Tag color="red" key={dataViewDetail?.payment_status}>
+                  {dataViewDetail?.payment_status?.toUpperCase()}
+                </Tag>
+              </>
+            )}
+          </Descriptions.Item>
+
+          <Descriptions.Item label="Trạng thái đơn hàng">
+            {dataViewDetail?.status == "Đang giao hàng" ? (
+              <>
+                <Tag color="blue" key={dataViewDetail?.status}>
+                  {dataViewDetail?.status?.toUpperCase()}
+                </Tag>
+              </>
+            ) : dataViewDetail?.status === "Đã hoàn thành" ? (
+              <>
+                <Tag color="green" key={dataViewDetail?.status}>
+                  {dataViewDetail?.status?.toUpperCase()}
+                </Tag>
+              </>
+            ) : (
+              <>
+                <Tag color="red" key={dataViewDetail.status}>
+                  {dataViewDetail?.status?.toUpperCase()}
+                </Tag>
+              </>
+            )}
+          </Descriptions.Item>
+
+          <Descriptions.Item label="Ngày đặt">
+            <DatePicker
+              defaultValue={dayjs(
+                formatDate(dataViewDetail.shipping_date),
+                dateFormatList[0]
+              )}
+              format={dateFormatList}
+              disabled
+            />
           </Descriptions.Item>
         </Descriptions>
-
-        <Divider orientation="left"> Ảnh </Divider>
-        <Upload
-          action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-          listType="picture-card"
-          fileList={fileList}
-          onPreview={handlePreview}
-          onChange={handleChange}
-          showUploadList={{ showRemoveIcon: false }}
-        ></Upload>
-        <Modal
-          open={previewOpen}
-          title={previewTitle}
-          footer={null}
-          onCancel={handleCancel}
-        >
-          <img alt="example" style={{ width: "100%" }} src={previewImage} />
-        </Modal>
       </Drawer>
     </>
   );

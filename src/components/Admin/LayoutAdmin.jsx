@@ -52,7 +52,7 @@ const LayoutAdmin = () => {
       icon: <UserOutlined />,
       children: [
         {
-          label: <Link to="/admin/user/client">Khách hàng</Link>,
+          label: <Link to="/admin/user">Khách hàng</Link>,
           key: "client",
           icon: <TeamOutlined />,
         },
@@ -74,10 +74,22 @@ const LayoutAdmin = () => {
       icon: <DollarCircleOutlined />,
     },
     {
-      label: <Link to="/admin/account">Tài khoản của tôi</Link>,
-      key: "account",
-      icon: <DollarCircleOutlined />,
+      label: <span>Tài khoản của tôi</span>,
+      
+      icon: <DollarCircleOutlined />, children: [
+        {
+          label: <Link to="/admin/account">Thông tin tài khoản</Link>,
+          key: "account",
+          icon: <TeamOutlined />,
+        },
+        {
+          label: <Link to="/admin/account/password">Đổi mật khẩu</Link>,
+          key: "password",
+          icon: <TeamOutlined />,
+        },
+      ],
     },
+    
     {
       label: <div onClick={showModal}>Đăng xuất</div>,
       key: "logout",
@@ -144,6 +156,7 @@ const LayoutAdmin = () => {
           <Dropdown menu={{ items: itemsDropdown }} trigger={["click"]}>
             <a onClick={(e) => e.preventDefault()}>
               <Space>
+                <span>I am {user.full_name}</span>
                 <GithubOutlined className="icon-acc" />
               </Space>
             </a>

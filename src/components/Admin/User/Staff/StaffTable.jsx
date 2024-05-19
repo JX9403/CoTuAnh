@@ -17,18 +17,18 @@ import {
   PlusCircleOutlined,
   ReloadOutlined,
 } from "@ant-design/icons";
-import ClientViewDetail from "./ClientViewDetail";
-import ClientModalCreate from "./ClientModalCreate";
-import ClientModalUpdate from "./ClientModalUpdate";
-import "./ClientTable.scss";
+import StaffViewDetail from "./StaffViewDetail";
+import StaffModalCreate from "./StaffModalCreate";
+import StaffModalUpdate from "./StaffModalUpdate";
+import "./StaffTable.scss";
 import { width } from "@fortawesome/free-brands-svg-icons/fa42Group";
 import {
-  callDeleteClient,
-  callFetchListClient,
+  callDeleteStaff,
+  callFetchListStaff,
 } from "../../../../services/apiAdmin";
 
-const ClientTable = () => {
-  const [listClient, setListClient] = useState([]);
+const StaffTable = () => {
+  const [listStaff, setListStaff] = useState([]);
   const [current, setCurrent] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [total, setTotal] = useState(0);
@@ -42,11 +42,11 @@ const ClientTable = () => {
 
   const [dataUpdate, setDataUpdate] = useState("");
 
-  const handleDeleteClient = async (id) => {
-    const res = await callDeleteClient(id);
+  const handleDeleteStaff = async (id) => {
+    const res = await callDeleteStaff(id);
     if (res && res.data) {
       message.success("Xóa thành công !");
-      fetchClient(current, pageSize);
+      fetchStaff(current, pageSize);
     } else {
       notification.error({
         message: "Có lỗi xảy ra !",
@@ -102,9 +102,9 @@ const ClientTable = () => {
         return (
           <>
             <Popconfirm
-              title="Xác nhận xóa Client"
+              title="Xác nhận xóa tài khoản"
               description="Bạn chắc chắn muốn xóa tài khoản này?"
-              onConfirm={() => handleDeleteClient(record.id)}
+              onConfirm={() => handleDeleteStaff(record.id)}
               okText="Xóa"
               cancelText="Hủy"
             >
@@ -134,15 +134,15 @@ const ClientTable = () => {
   ];
 
   useEffect(() => {
-    fetchClient(current, pageSize);
+    fetchStaff(current, pageSize);
   }, [current, pageSize, openViewDetail]);
 
-  const fetchClient = async (current, pageSize) => {
+  const fetchStaff = async (current, pageSize) => {
     let query = `${current}/${pageSize}`;
-    const res = await callFetchListClient(query);
-    console.log("check fetch list client res", res);
+    const res = await callFetchListStaff(query);
+    console.log("check fetch list Staff res", res);
     if (res && res.data.content) {
-      setListClient(res.data.content);
+      setListStaff(res.data.content);
       setTotal(res.data.size * res.data.totalPages);
     }
   };
@@ -160,7 +160,7 @@ const ClientTable = () => {
 
   return (
     <>
-      <div className="client-container">
+      <div className="Staff-container">
         <Row
           gutter={[20, 20]}
           style={{
@@ -170,8 +170,8 @@ const ClientTable = () => {
             width: "100%",
           }}
         >
-          <Col className="client-title" span={12}>
-            Danh sách khách hàng
+          <Col className="Staff-title" span={12}>
+            Danh sách nhân viên
           </Col>
           <Col span={12} style={{ display: "flex", justifyContent: "right" }}>
             <Button
@@ -191,9 +191,9 @@ const ClientTable = () => {
           <Col span={24}>
             <Table
               showSorterTooltip="false"
-              className="client-table"
+              className="Staff-table"
               columns={columns}
-              dataSource={listClient}
+              dataSource={listStaff}
               onChange={onChange}
               rowKey="id"
               pagination={{
@@ -207,31 +207,33 @@ const ClientTable = () => {
         </Row>
       </div>
 
-      <ClientModalCreate
+      <StaffModalCreate
         openModalCreate={openModalCreate}
         setOpenModalCreate={setOpenModalCreate}
-        fetchClient={fetchClient}
+        fetchStaff={fetchStaff}
         page={current}
         pageSize={pageSize}
       />
 
-      <ClientModalUpdate
+      <StaffModalUpdate
         openModalUpdate={openModalUpdate}
         setOpenModalUpdate={setOpenModalUpdate}
         dataUpdate={dataUpdate}
-        fetchClient={fetchClient}
+        fetchStaff={fetchStaff}
         page={current}
         pageSize={pageSize}
       />
 
-      <ClientViewDetail
+      <StaffViewDetail
         openViewDetail={openViewDetail}
         setOpenViewDetail={setOpenViewDetail}
         dataViewDetail={dataViewDetail}
         setDataViewDetail={setDataViewDetail}
+        page={current}
+        pageSize={pageSize}
       />
     </>
   );
 };
 
-export default ClientTable;
+export default StaffTable;

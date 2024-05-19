@@ -10,14 +10,14 @@ import {
   message,
   notification,
 } from "antd";
-import { callUpdateClient } from "../../../../services/apiAdmin";
+import { callUpdateStaff } from "../../../../services/apiAdmin";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 dayjs.extend(customParseFormat);
 const dateFormatList = ["DD/MM/YYYY", "DD/MM/YY", "DD-MM-YYYY", "DD-MM-YY"];
-const ClientModalUpdate = (props) => {
-  const { openModalUpdate, setOpenModalUpdate, dataUpdate, fetchClient ,page, pageSize  } =
-    props; 
+const StaffModalUpdate = (props) => {
+  const { openModalUpdate, setOpenModalUpdate, dataUpdate, fetchStaff , page, pageSize} =
+    props;
 
   const [isSubmit, setIsSubmit] = useState(false);
   function formatDate(inputDate) {
@@ -72,7 +72,7 @@ const ClientModalUpdate = (props) => {
       avatar,
     } = values;
     // setIsSubmit(true);
-    const res = await callUpdateClient(
+    const res = await callUpdateStaff(
       id,
       full_name,
       email,
@@ -83,12 +83,12 @@ const ClientModalUpdate = (props) => {
       date_of_birth,
       avatar
     );
-    console.log("check update data", res);
+    // console.log("check update data", res);
     if (res && res.data) {
       message.success("Lưu thành công !");
       form.resetFields();
       setOpenModalUpdate(false);
-      await fetchClient(page, pageSize);
+      await fetchStaff(page, pageSize);
     } else {
       notification.error({
         message: "Đã có lỗi xảy ra !",
@@ -101,7 +101,7 @@ const ClientModalUpdate = (props) => {
   useEffect(() => {
     form.setFieldsValue(dataUpdate);
   }, [dataUpdate]);
-  console.log("check dataupdate", dataUpdate);
+  // console.log("check dataupdate", dataUpdate);
   return (
     <>
       <Modal
@@ -190,4 +190,4 @@ const ClientModalUpdate = (props) => {
   );
 };
 
-export default ClientModalUpdate;
+export default StaffModalUpdate;

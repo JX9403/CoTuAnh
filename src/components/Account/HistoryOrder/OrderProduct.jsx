@@ -18,15 +18,14 @@ export default function OrderProduct(props) {
   const [formReview] = useForm();
   const orderItem = props.orderItem;
   const user = props.user;
-  // console.log("check prop", orderItem);
+  const status = props.status;
+  console.log("check prop", orderItem);
   const [isComment, setIsComment] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
   const handleButtonClick = () => {
     setShowModal(true);
   };
-
-
 
   function maskName(name) {
     name = name.split(" ");
@@ -41,20 +40,22 @@ export default function OrderProduct(props) {
       .join(" ");
   }
 
-  useEffect(() => {
-    const checkComments = async () => {
+  const checkComments = async () => {
+    if (status !== "Đã hoàn thành") {
+      setIsComment(true);
+    } else {
       if (orderItem.product_response.comments?.length) {
         const foundComment = orderItem.product_response.comments.find(
           (comment) => comment.username === maskName(user.full_name)
         );
         setIsComment(!!foundComment); // Set isComment based on comment existence
       }
-    };
+    }
+  };
 
+  useEffect(() => {
     checkComments();
-  }, [orderItem.product_response.comments, user.full_name]);
-
-
+  }, [orderItem.product_response.comments, user.full_name, status]);
 
   const onFinish = async (values) => {
     values = {

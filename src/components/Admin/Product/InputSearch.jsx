@@ -15,11 +15,12 @@ const InputSearch = (props) => {
   };
   const fetchListCategory = async () => {
     const res = await callFetchCategory();
+    // console.log("check get cate" , res)
     if (res && res.data) {
-      const d = res.data.map((item) => {
+      const d = res.data.data.map((item) => {
         return {
-          label: item,
-          value: item,
+          label: item.categoryName,
+          value: item.id,
         };
       });
       setListCategory(d);
@@ -35,12 +36,12 @@ const InputSearch = (props) => {
     // console.log("Received values of form: ", values);
 
     let query = "";
-    if (values.mainText) {
-      query += `&mainText=/${values.mainText}/i`;
+    if (values.product_name) {
+      query += `&keyword=${values.product_name}`;
     }
 
     if (values.category) {
-      query += `&category=/${values.category}/i`;
+      query += `&category_id=${values.category}`;
     }
 
     if (query) {
@@ -59,7 +60,7 @@ const InputSearch = (props) => {
         <Col span={12}>
           <Form.Item
             labelCol={{ span: 24 }} //whole column
-            name={`mainText`}
+            name={`product_name`}
             label={`Tên sản phẩm`}
           >
             <Input placeholder="placeholder" />

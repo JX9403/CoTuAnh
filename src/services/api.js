@@ -89,48 +89,31 @@ export const callFetchListProduct = (query) => {
 };
 
 export const callCreateProduct = (
-  mainText,
-  author,
+  product_name,
   price,
-  category,
-  quantity,
-  sold,
-  thumbnail,
-  slider
+  unit,
+  category_id,
+  description,
+  quantity
 ) => {
-  return axios.post("/api/v1/book", {
-    mainText,
-    author,
+  return axios.post("/api/v1/products", {
+    product_name,
     price,
-    category,
+    unit,
+    category_id,
+    description,
     quantity,
-    sold,
-    thumbnail,
-    slider,
   });
 };
 
-export const callUpdateProduct = (_id, fullName, phone) => {
-  return axios.put("/api/v1/book", { _id, fullName, phone });
+export const callUpdateProduct = (id, product_name, price, unit, category_id, description, quantity) => {
+  return axios.put(`/api/v1/products/${id}`, { product_name, price, unit, category_id, description, quantity});
 };
 
 export const callDeleteProduct = (id) => {
-  return axios.delete(`/api/v1/book/${id}`);
+  return axios.delete(`/api/v1/products/${id}`);
 };
 
-export const callUploadProductImg = (fileImg) => {
-  const bodyFormData = new FormData();
-  bodyFormData.append("fileImg", fileImg);
-  return axios({
-    method: "post",
-    url: "/api/v1/file/upload",
-    data: bodyFormData,
-    headers: {
-      "Content-Type": "multipart/form-data",
-      "upload-type": "book",
-    },
-  });
-};
 
 // End call manager product
 
@@ -138,8 +121,6 @@ export const callUploadProductImg = (fileImg) => {
 export const callFetchListOrder = (query) => {
   return axios.get(`/api/v1/book?${query}`);
 };
-
-
 
 export const callProductImg = (img) => {
   return axios.get(`/api/v1/productImage/${img}`);

@@ -16,7 +16,6 @@ import AdminPage from "./pages/admin";
 import ProtectedRoute from "./components/ProtectedRoute";
 import LayoutAdmin from "./components/Admin/LayoutAdmin";
 import "./styles/reset.scss";
-import UserTable from "./components/Admin/User/UserTable";
 import ProductTable from "./components/Admin/Product/ProductTable";
 import ProductPage from "./pages/product";
 import AboutPage from "./pages/about";
@@ -30,6 +29,8 @@ import ClientTable from "./components/Admin/User/Client/ClientTable";
 import Cart from "./pages/cart";
 import Pay from "./pages/pay";
 import OrderDetails from "./components/Account/HistoryOrder/OrderDetails";
+import ChangePassAdmin from "./components/Admin/ChangePassAdmin";
+import StaffTable from "./components/Admin/User/Staff/StaffTable";
 
 const Layout = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -156,12 +157,12 @@ export default function App() {
           path: "user",
           children: [
             {
-              path: "client",
+              index : true,
               element: <ClientTable />,
             },
             {
               path: "staff",
-              element: <UserTable />,
+              element: <StaffTable/>,
             },
           ],
         },
@@ -182,7 +183,7 @@ export default function App() {
             },
             {
               path: "password",
-              element: <ChangePass />,
+              element: <ChangePassAdmin />,
             },
           ],
         },

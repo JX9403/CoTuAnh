@@ -10,6 +10,7 @@ import {
   Rate,
   Row,
   Skeleton,
+  Tag,
 } from "antd";
 import "./historyOrder.scss";
 import { useEffect, useState } from "react";
@@ -33,7 +34,7 @@ const HistoryOrder = () => {
   const fetchListOrder = async () => {
     setSubmit(true);
     const res = await callListOrder();
-    // console.log("check res call order :", res);
+    console.log("check res call order :", res);
     if (res && res.data.data) {
       setOrderList(res.data.data);
     }
@@ -75,20 +76,43 @@ const HistoryOrder = () => {
               <>
                 {orderList.map((order) => (
                   <div className="order-box" key={order.id}>
-                    <Row  className='row-hover' onClick={() => handleDetailOrder(order.id)} style={{margin:'0', padding:'20px 0'}}>
+                    <Row
+                      className="row-hover"
+                      onClick={() => handleDetailOrder(order.id)}
+                      style={{ margin: "0", padding: "20px 0" }}
+                    >
                       <Col className="item-id" span={21}>
                         Mã đơn hàng : {order.id}
                       </Col>
 
                       <Col span={3} className="item-status">
-                        {order.status.toUpperCase()}
+                        {order.status == "Đang giao hàng" ? (
+                          <>
+                            <Tag color="blue" key={order.status}>
+                              {order.status.toUpperCase()}
+                            </Tag>
+                          </>
+                        ) : order.status === "Đã hoàn thành" ? (
+                          <>
+                            <Tag color="green" key={order.status}>
+                              {order.status.toUpperCase()}
+                            </Tag>
+                          </>
+                        ) : (
+                          <>
+                            <Tag color="red" key={order.status}>
+                              {order.status.toUpperCase()}
+                            </Tag>
+                          </>
+                        )}
+                        
                       </Col>
                     </Row>
 
                     <Divider />
 
                     {order.order_details.map((orderItem) => (
-                      <OrderProduct orderItem={orderItem} user={user} />
+                      <OrderProduct orderItem={orderItem} user={user} status = {order.status}/>
                     ))}
                     <Divider />
                     <Row>

@@ -1,27 +1,47 @@
 import { useForm } from "antd/es/form/Form";
 import { useEffect, useState } from "react";
-import { callUpdateProduct } from "../../../services/api";
-import { Divider, Form, Input, Modal, message, notification } from "antd";
+import { callFetchCategory, callUpdateProduct } from "../../../services/api";
+import {
+  Col,
+  Divider,
+  Form,
+  Input,
+  InputNumber,
+  Modal,
+  Row,
+  Select,
+  message,
+  notification,
+} from "antd";
 
 const ProductModalUpdate = (props) => {
-  const {
-    openModalUpdate,
-    setOpenModalUpdate,
-    dataUpdate,
-    fetchProduct,
-    
-  } = props;
+  const { openModalUpdate, setOpenModalUpdate, dataUpdate, fetchProduct } =
+    props;
+  const [listCategory, setListCategory] = useState([]);
 
-  
   const [isSubmit, setIsSubmit] = useState(false);
+const [loading, setLoading] = useState(false);
+
 
   const [form] = useForm();
 
   const onFinish = async (values) => {
-    const { _id, fullName, phone } = values;
+    values = {
+      id: dataUpdate.product_id,
+      product_name: values.product_name,
+      price: values.price,
+      unit: values.unit,
+      category_id: values.category_id,
+      description: values.description,
+      quantity: values.quantity,
+    };
+    const { id, product_name, price, unit, category_id, description, quantity } =
+      values;
+    console.log("check value gửi đi", values);
     setIsSubmit(true);
-    const res = await callUpdateProduct(_id, fullName, phone);
-    if (res && res.data) {
+    setLoading(true)
+    const res = await callUpdateProduct(id, product_name, price, unit, category_id, description, quantity);
+    if (res && res.data.data) {
       message.success("Lưu thành công !");
       form.resetFields();
       setOpenModalUpdate(false);
@@ -32,70 +52,138 @@ const ProductModalUpdate = (props) => {
         description: res.message,
       });
     }
+    setLoading(false)
     setIsSubmit(false);
   };
 
- 
-  useEffect(()=> {
+  useEffect(() => {
+    const fetchCategory = async () => {
+      const res = await callFetchCategory();
+      if (res && res.data) {
+        const d = res.data.data.map((item) => {
+          return { label: item.categoryName, value: item.id };
+        });
+        setListCategory(d);
+      }
+    };
+    fetchCategory();
+  }, []);
+
+  useEffect(() => {
     form.setFieldsValue(dataUpdate);
-  }, [dataUpdate])
+  }, [dataUpdate]);
 
   return (
     <>
-      <Modal forceRender 
-        title="Chỉnh sửa thông tin "
+      <Modal
+      loading={loading}
+        title="Chỉnh sửa thông tin sản phẩm"
         open={openModalUpdate}
         onOk={() => {
           form.submit();
         }}
-        onCancel={() => setOpenModalUpdate(false)}
-        okText="Lưu"
-        cancelText="Hủy"
+        onCancel={() => {
+          form.resetFields();
+          setOpenModalUpdate(false);
+        }}
+        okText={"Lưu"}
+        cancelText={"Hủy"}
         confirmLoading={isSubmit}
+        width={"50vw"}
+        //do not close when click fetchProduct
+        maskClosable={false}
       >
         <Divider />
-        <Form
-          form={form}
-          name="basic"
-          style={{ maxWidth: 600 }}
-          onFinish={onFinish}
-        >
-          <Form.Item
-            hidden
-            labelCol={{ span: 24 }} //whole column
-            label="ID"
-            name="_id"
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            labelCol={{ span: 24 }} //whole column
-            label="Họ tên"
-            name="fullName"
-            rules={[{ required: true, message: "Họ tên không được để trống!" }]}
-          >
-            <Input />
-          </Form.Item>
 
-          <Form.Item
-            labelCol={{ span: 24 }} //whole column
-            label="Email"
-            name="email"
-            rules={[{ required: true, message: "Email không được để trống!" }]}
-          >
-            <Input disabled />
-          </Form.Item>
+        <Form form={form} onFinish={onFinish} autoComplete="off">
+          <Row gutter={15}>
+            <Col span={24}>
+              <Form.Item
+                labelCol={{ span: 24 }}
+                label="Tên sản phẩm"
+                name="product_name"
+                rules={[
+                  { required: true, message: "Vui lòng nhập tên sản phẩm!" },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
 
-          <Form.Item
-            labelCol={{ span: 24 }} //whole column
-            label="Số điện thoại"
-            name="phone"
-            rules={[
-              { required: true, message: "Số điện thoại không được để trống!" },
-            ]}
-          >
-            <Input />
-          </Form.Item>
+            <Col span={12}>
+              <Form.Item
+                labelCol={{ span: 24 }}
+                label="Giá tiền"
+                name="price"
+                rules={[{ required: true, message: "Vui lòng nhập giá tiền!" }]}
+              >
+                <InputNumber
+                  min={0}
+                  style={{ width: "100%" }}
+                  formatter={(value) =>
+                    `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                  }
+                  addonAfter="VND"
+                />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                labelCol={{ span: 24 }}
+                label="Đơn vị"
+                name="unit"
+                rules={[
+                  { required: true, message: "Vui lòng nhập đơn vị sản phẩm!" },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+
+            <Col span={12}>
+              <Form.Item
+                labelCol={{ span: 24 }}
+                label=" Danh mục sản phẩm "
+                name="category_id"
+                rules={[
+                  {
+                    required: true,
+                    message: "Vui lòng chọn danh mục sản phẩm!",
+                  },
+                ]}
+              >
+                <Select
+                  showSearch
+                  allowClear
+                  //  onChange={handleChange}
+                  options={listCategory}
+                />
+              </Form.Item>
+            </Col>
+
+            <Col span={12}>
+              <Form.Item
+                labelCol={{ span: 24 }}
+                label="Số lượng"
+                name="quantity"
+                rules={[{ required: true, message: "Vui lòng nhập số lượng!" }]}
+              >
+                <InputNumber min={1} style={{ width: "100%" }} />
+              </Form.Item>
+            </Col>
+            <Col span={24}>
+              <Form.Item
+                labelCol={{ span: 24 }}
+                label="Mô tả"
+                name="description"
+                rules={[
+                  { required: true, message: "Vui lòng nhập mô tả sản phẩm!" },
+                ]}
+              >
+                <Input.TextArea rows={4} />
+              </Form.Item>
+            </Col>
+          </Row>
         </Form>
       </Modal>
     </>

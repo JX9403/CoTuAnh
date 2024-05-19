@@ -1,67 +1,35 @@
 import { useForm } from "antd/es/form/Form";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { Divider, Form, Input, Modal, message, notification, DatePicker } from "antd";
+import { callCreateStaff } from "../../../../services/apiAdmin";
 
-import {
-  DatePicker,
-  Divider,
-  Form,
-  Input,
-  Modal,
-  message,
-  notification,
-} from "antd";
-import { callUpdateClient } from "../../../../services/apiAdmin";
-import dayjs from "dayjs";
-import customParseFormat from "dayjs/plugin/customParseFormat";
-dayjs.extend(customParseFormat);
-const dateFormatList = ["DD/MM/YYYY", "DD/MM/YY", "DD-MM-YYYY", "DD-MM-YY"];
-const ClientModalUpdate = (props) => {
-  const { openModalUpdate, setOpenModalUpdate, dataUpdate, fetchClient ,page, pageSize  } =
-    props; 
-
+const StaffModalCreate = (props) => {
+  const { openModalCreate, setOpenModalCreate, fetchStaff, page, pageSize } = props;
   const [isSubmit, setIsSubmit] = useState(false);
-  function formatDate(inputDate) {
-    const date = new Date(inputDate);
-    const day = date.getUTCDate();
-    const month = date.getUTCMonth() + 1; // Tháng tính từ 0
-    const year = date.getUTCFullYear();
-
-    // Đảm bảo định dạng dd/mm/yyyy
-    const formattedDay = day < 10 ? `0${day}` : day;
-    const formattedMonth = month < 10 ? `0${month}` : month;
-
-    return `${formattedDay}/${formattedMonth}/${year}`;
-  }
+  const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY', 'DD-MM-YYYY', 'DD-MM-YY'];
   const [form] = useForm();
-  // full_name: values.full_name,
-  // email: values.email,
-  // password: values.password,
-  // phone_number: values.phone_number,
-  // role: values.role,
-  // address: values.address,
-  // date_of_birth: values.dateofbirth.toString(),
-  // avatar: "",
+
+  // "email": "string",
+  // "password": "string",
+  // "phone_number": "6206344080294140278881918447",
+  // "address": "string",
+  // "date_of_birth": "2024-05-17T10:29:50.151Z",
+  // "full_name": "string",
+  // "avatar": "string",
+  // "role": "ADMIN"
   const onFinish = async (values) => {
-    values.newPassword = values.newPassword
-      ? values.newPassword
-      : dataUpdate.password;
-    values.dateofbirth = values.dateofbirth == null
-      ? dataUpdate.date_of_birth
-      : values.dateofbirth;
     values = {
-      id: dataUpdate.id,
       full_name: values.full_name,
       email: values.email,
-      password: values.newPassword,
+      password: values.password,
       phone_number: values.phone_number,
       role: values.role,
       address: values.address,
-      date_of_birth: values.dateofbirth,
+      date_of_birth: values.dateofbirth.toString(),
       avatar: "",
     };
     console.log("check value gui di", values);
     const {
-      id,
       full_name,
       email,
       password,
@@ -71,9 +39,10 @@ const ClientModalUpdate = (props) => {
       date_of_birth,
       avatar,
     } = values;
-    // setIsSubmit(true);
-    const res = await callUpdateClient(
-      id,
+
+    setIsSubmit(true);
+
+    const res = await callCreateStaff(
       full_name,
       email,
       password,
@@ -83,41 +52,46 @@ const ClientModalUpdate = (props) => {
       date_of_birth,
       avatar
     );
-    console.log("check update data", res);
+    console.log("check res khi tao moi nguoi dung", res);
+
     if (res && res.data) {
-      message.success("Lưu thành công !");
+      message.success("Tạo mới thành công !");
       form.resetFields();
-      setOpenModalUpdate(false);
-      await fetchClient(page, pageSize);
+
+      setOpenModalCreate(false);
+
+      await fetchStaff(page, pageSize);
     } else {
       notification.error({
         message: "Đã có lỗi xảy ra !",
         description: res.message,
       });
     }
+
     setIsSubmit(false);
   };
-
-  useEffect(() => {
-    form.setFieldsValue(dataUpdate);
-  }, [dataUpdate]);
-  console.log("check dataupdate", dataUpdate);
   return (
     <>
       <Modal
-        forceRender
-        title="Chỉnh sửa thông tin "
-        open={openModalUpdate}
+        title="Thêm mới khách hàng"
+        open={openModalCreate}
         onOk={() => {
           form.submit();
         }}
-        onCancel={() => setOpenModalUpdate(false)}
-        okText="Lưu"
+        onCancel={() => setOpenModalCreate(false)}
+        okText="Tạo mới"
         cancelText="Hủy"
         confirmLoading={isSubmit}
+        width={"50vw"}
       >
         <Divider />
-        <Form form={form} name="basic" onFinish={onFinish}>
+        <Form
+          form={form}
+         
+          style={{ maxWidth: 600 }}
+          onFinish={onFinish}
+          autoComplete="off"
+        >
           <Form.Item
             labelCol={{ span: 24 }} //whole column
             label="Họ tên"
@@ -159,8 +133,11 @@ const ClientModalUpdate = (props) => {
           </Form.Item>
           <Form.Item
             labelCol={{ span: 24 }} //whole column
-            label="Tạo mật khẩu mới"
-            name="newPassword"
+            label="Mật khẩu"
+            name="password"
+            rules={[
+              { required: true, message: "Mật khẩu không được để trống!" },
+            ]}
           >
             <Input.Password />
           </Form.Item>
@@ -168,9 +145,7 @@ const ClientModalUpdate = (props) => {
             labelCol={{ span: 24 }} //whole column
             label="Vai trò"
             name="role"
-            rules={[
-              { required: true, message: "Vai trò không được để trống!" },
-            ]}
+            rules={[{ required: true, message: "Vai trò không được để trống!" }]}
           >
             <Input />
           </Form.Item>
@@ -190,4 +165,4 @@ const ClientModalUpdate = (props) => {
   );
 };
 
-export default ClientModalUpdate;
+export default StaffModalCreate;

@@ -1,4 +1,4 @@
-.client {
+.product {
   &-container {
     padding: 0 40px;
     margin-top: 30px;
@@ -96,4 +96,37 @@ table{
 
 .ant-modal-body{
   width: 100%;
+}
+
+:where(.css-dev-only-do-not-override-1okl62o).ant-input-number-outlined:focus, :where(.css-dev-only-do-not-override-1okl62o).ant-input-number-outlined:focus-within {
+  border-color: #46b91d;
+  box-shadow: 0 0 0 2px rgba(5, 145, 255, 0.1);
+  outline: 0;
+  background-color: #ffffff;}
+
+  :where(.css-dev-only-do-not-override-1okl62o).ant-input-number-outlined:hover {
+    border-color: #46b91d;
+    background-color: #ffffff;
+}
+
+.ant-select-selection-item{
+  border-color: #46b91d;
+}
+
+.ant-select-outlined:not(.ant-select-disabled) .ant-select-selector,
+.ant-select-customize-input:not(.ant-pagination-size-changer) .ant-select-selector {
+  border-color: #46b91d;
+}
+
+.ant-select-focused .ant-select-selector,
+.css-ov--doly-do-not-override-l0k162 .ant-select-selector,
+.ant-select-disabled .ant-select-selector,
+.ant-select-customize-input .ant-select-selector{
+  border-color: #46b91d;
+}
+
+.ant-select-focused.ant-select-outlined:not(.ant-select-disabled):not(.ant-select-customize-input):not(.ant-pagination-size-changer) .ant-select-selector{
+  border-color: #46b91d;
+  box-shadow: 0 0 0 2px rgba(24, 255, 47, 0.2);
+  outline: 0;
 }
