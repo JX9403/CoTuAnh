@@ -1,0 +1,69 @@
+.general-content {
+    padding: 35px 40px;
+    // border: 1px solid #000;
+    padding-bottom: 0;
+
+    .header-content {
+        font-size: 24px;
+        font-weight: 700; 
+        margin-bottom: 8px;
+    }
+
+    .data-statistic{
+        border-color: #A4A4A4;
+        .ant-card-body{
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .ant-picker {
+            .ant-picker-input>input::placeholder {
+                color: #000;
+            }
+            .anticon {
+                color: #000;
+            }
+
+        }
+
+        .ant-statistic-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: #000;
+        }
+
+        .ant-statistic-content-value, .ant-statistic-content-suffix  {
+            color: #5EB600;
+            font-size: 20px;
+            font-weight: bold;
+        }
+    }
+    .chart-statistic {
+        border-color: #A4A4A4;
+
+        .ant-menu {
+            border-bottom: 1px solid #000;
+            margin-bottom: 20px;
+        }
+        // .ant-menu::-webkit-scrollbar {
+        //     display: none;
+        // }
+
+        .ant-menu-item::after {
+            border: 0;
+        }
+        .ant-menu {
+            font-weight: 500;
+            font-size: 16px;
+        }
+        .ant-menu-item:hover{
+            color: #5EB600 !important;
+        }
+
+        .ant-menu-item-selected {
+            color: #5EB600;
+            border: 2px solid #000 !important;
+            border-radius: 10px 10px 0 0;
+        }
+    }
+}

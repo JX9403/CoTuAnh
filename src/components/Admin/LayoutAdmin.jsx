@@ -42,7 +42,7 @@ const LayoutAdmin = () => {
   };
   const items = [
     {
-      label: <Link to="/admin">Dashboard</Link>,
+      label: <Link style={{textDecoration:'none'}} to="/admin">Dashboard</Link>,
       key: "dashboard",
       icon: <AppstoreOutlined />,
     },
@@ -52,38 +52,93 @@ const LayoutAdmin = () => {
       icon: <UserOutlined />,
       children: [
         {
-          label: <Link to="/admin/user">Khách hàng</Link>,
+          label: <Link style={{textDecoration:'none'}} to="/admin/user">Khách hàng</Link>,
           key: "client",
           icon: <TeamOutlined />,
         },
         {
-          label: <Link to="/admin/user/staff">Nhân viên</Link>,
+          label: <Link style={{textDecoration:'none'}} to="/admin/user/staff">Nhân viên</Link>,
           key: "staff",
           icon: <TeamOutlined />,
         },
       ],
     },
     {
-      label: <Link to="/admin/product">Quản lý sản phẩm</Link>,
-      key: "product",
+      label: <span>Quản lý sản phẩm</span>,
+      // key: 'user',
       icon: <ExceptionOutlined />,
+      children: [
+        {
+          label: <Link style={{textDecoration:'none'}} to="/admin/product">Sản phẩm</Link>,
+          key: "product",
+          icon: <TeamOutlined />,
+        },
+        {
+          label: <span>Kho</span>,
+          key: 'warehouse',
+          children : [
+            {
+              label: <Link style={{textDecoration:'none'}} to="/admin/product/receipt">Nhập kho</Link>,
+              key: "receipt",
+              // icon: <TeamOutlined />,
+            },
+            {
+              label: <Link style={{textDecoration:'none'}} to="/admin/product/receipt/inventory">Kiểm kho</Link>,
+              key: "inventory",
+              // icon: <TeamOutlined />,
+            },
+          ]
+        },
+        {
+          label: <Link style={{textDecoration:'none'}} to="/admin/product/partner">Nhà cung cấp</Link>,
+          key: "partner",
+          // icon: <TeamOutlined />,
+        },
+      ],
     },
+    // {
+    //   label: <Link to="/admin/product">Quản lý sản phẩm</Link>,
+    //   key: "product",
+    //   icon: <ExceptionOutlined />,
+    // },
     {
-      label: <Link to="/admin/order">Quản lý hóa đơn</Link>,
+      label: <Link style={{textDecoration:'none'}} to="/admin/order">Quản lý hóa đơn</Link>,
       key: "order",
       icon: <DollarCircleOutlined />,
+    },
+    {
+      label: <span>Thống kê</span>,
+      // key: 'user',
+      icon: <AppstoreOutlined />,
+      children: [
+        {
+          label: <Link style={{textDecoration:'none'}} to="/admin/revenuestatistic">Báo cáo bán hàng</Link>,
+          key: "1",
+          // icon: <TeamOutlined />,
+        },
+        {
+          label: <Link style={{textDecoration:'none'}} to="/admin/revenuestatistic/receiptstatistic">Báo cáo nhập hàng</Link>,
+          key: "2",
+          // icon: <TeamOutlined />,
+        },
+        {
+          label: <Link style={{textDecoration:'none'}} to="/admin/revenuestatistic/profitstatistic">Báo cáo lợi nhuận</Link>,
+          key: "3",
+          // icon: <TeamOutlined />,
+        },
+      ],
     },
     {
       label: <span>Tài khoản của tôi</span>,
       
       icon: <DollarCircleOutlined />, children: [
         {
-          label: <Link to="/admin/account">Thông tin tài khoản</Link>,
+          label: <Link style={{textDecoration:'none'}} to="/admin/account">Thông tin tài khoản</Link>,
           key: "account",
           icon: <TeamOutlined />,
         },
         {
-          label: <Link to="/admin/account/password">Đổi mật khẩu</Link>,
+          label: <Link style={{textDecoration:'none'}} to="/admin/account/password">Đổi mật khẩu</Link>,
           key: "password",
           icon: <TeamOutlined />,
         },
