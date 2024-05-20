@@ -14,7 +14,7 @@
 
   &-title{
     font-size: 30px;
-    color: #46b91d;
+    color: #575757;
     font-weight: 700;
     padding: 10px 20px;
   }
@@ -129,4 +129,8 @@ table{
   border-color: #46b91d;
   box-shadow: 0 0 0 2px rgba(24, 255, 47, 0.2);
   outline: 0;
+}
+
+.ant-pagination-item-active {
+  color: black;
 }

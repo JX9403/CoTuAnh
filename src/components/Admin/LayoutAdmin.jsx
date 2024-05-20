@@ -40,62 +40,328 @@ const LayoutAdmin = () => {
     message.success("Đăng xuất thành công");
     navigate("/admin");
   };
-  const items = [
-    {
-      label: <Link to="/admin">Dashboard</Link>,
-      key: "dashboard",
-      icon: <AppstoreOutlined />,
-    },
-    {
-      label: <span>Quản lý tài khoản</span>,
-      // key: 'user',
-      icon: <UserOutlined />,
-      children: [
-        {
-          label: <Link to="/admin/user">Khách hàng</Link>,
-          key: "client",
-          icon: <TeamOutlined />,
-        },
-        {
-          label: <Link to="/admin/user/staff">Nhân viên</Link>,
-          key: "staff",
-          icon: <TeamOutlined />,
-        },
-      ],
-    },
-    {
-      label: <Link to="/admin/product">Quản lý sản phẩm</Link>,
-      key: "product",
-      icon: <ExceptionOutlined />,
-    },
-    {
-      label: <Link to="/admin/order">Quản lý hóa đơn</Link>,
-      key: "order",
-      icon: <DollarCircleOutlined />,
-    },
-    {
-      label: <span>Tài khoản của tôi</span>,
-      
-      icon: <DollarCircleOutlined />, children: [
-        {
-          label: <Link to="/admin/account">Thông tin tài khoản</Link>,
-          key: "account",
-          icon: <TeamOutlined />,
-        },
-        {
-          label: <Link to="/admin/account/password">Đổi mật khẩu</Link>,
-          key: "password",
-          icon: <TeamOutlined />,
-        },
-      ],
-    },
-    
-    {
-      label: <div onClick={showModal}>Đăng xuất</div>,
-      key: "logout",
-      icon: <DollarCircleOutlined />,
-    },
-  ];
+  let items = [];
+  if (user.role === "SALES") {
+    items = [
+      {
+        label: (
+          <Link style={{ textDecoration: "none" }} to="/admin/order">
+            Quản lý hóa đơn
+          </Link>
+        ),
+        key: "order",
+        icon: <DollarCircleOutlined />,
+      },
+
+      {
+        label: <span>Tài khoản của tôi</span>,
+
+        icon: <DollarCircleOutlined />,
+        children: [
+          {
+            label: (
+              <Link style={{ textDecoration: "none" }} to="/admin/account">
+                Thông tin tài khoản
+              </Link>
+            ),
+            key: "account",
+            icon: <TeamOutlined />,
+          },
+          {
+            label: (
+              <Link
+                style={{ textDecoration: "none" }}
+                to="/admin/account/password"
+              >
+                Đổi mật khẩu
+              </Link>
+            ),
+            key: "password",
+            icon: <TeamOutlined />,
+          },
+        ],
+      },
+
+      {
+        label: <div onClick={showModal}>Đăng xuất</div>,
+        key: "logout",
+        icon: <DollarCircleOutlined />,
+      },
+    ];
+  } else if (user.role === "WAREHOUSES") {
+    items = [
+      {
+        label: <span>Quản lý sản phẩm</span>,
+        // key: 'user',
+        icon: <ExceptionOutlined />,
+        children: [
+          {
+            label: (
+              <Link style={{ textDecoration: "none" }} to="/admin/product">
+                Sản phẩm
+              </Link>
+            ),
+            key: "product",
+            icon: <TeamOutlined />,
+          },
+          {
+            label: <span>Kho</span>,
+            key: "warehouse",
+            children: [
+              {
+                label: (
+                  <Link
+                    style={{ textDecoration: "none" }}
+                    to="/admin/product/receipt"
+                  >
+                    Nhập kho
+                  </Link>
+                ),
+                key: "receipt",
+                // icon: <TeamOutlined />,
+              },
+              {
+                label: (
+                  <Link
+                    style={{ textDecoration: "none" }}
+                    to="/admin/product/receipt/inventory"
+                  >
+                    Kiểm kho
+                  </Link>
+                ),
+                key: "inventory",
+                // icon: <TeamOutlined />,
+              },
+            ],
+          },
+          {
+            label: (
+              <Link
+                style={{ textDecoration: "none" }}
+                to="/admin/product/partner"
+              >
+                Nhà cung cấp
+              </Link>
+            ),
+            key: "partner",
+          },
+        ],
+      },
+
+      {
+        label: <span>Tài khoản của tôi</span>,
+
+        icon: <DollarCircleOutlined />,
+        children: [
+          {
+            label: (
+              <Link style={{ textDecoration: "none" }} to="/admin/account">
+                Thông tin tài khoản
+              </Link>
+            ),
+            key: "account",
+            icon: <TeamOutlined />,
+          },
+          {
+            label: (
+              <Link
+                style={{ textDecoration: "none" }}
+                to="/admin/account/password"
+              >
+                Đổi mật khẩu
+              </Link>
+            ),
+            key: "password",
+            icon: <TeamOutlined />,
+          },
+        ],
+      },
+
+      {
+        label: <div onClick={showModal}>Đăng xuất</div>,
+        key: "logout",
+        icon: <DollarCircleOutlined />,
+      },
+    ];
+  } else {
+    items = [
+      {
+        label: (
+          <Link style={{ textDecoration: "none" }} to="/admin">
+            Dashboard
+          </Link>
+        ),
+        key: "dashboard",
+        icon: <AppstoreOutlined />,
+      },
+      {
+        label: <span>Quản lý tài khoản</span>,
+        // key: 'user',
+        icon: <UserOutlined />,
+        children: [
+          {
+            label: (
+              <Link style={{ textDecoration: "none" }} to="/admin/user">
+                Khách hàng
+              </Link>
+            ),
+            key: "client",
+            icon: <TeamOutlined />,
+          },
+          {
+            label: (
+              <Link style={{ textDecoration: "none" }} to="/admin/user/staff">
+                Nhân viên
+              </Link>
+            ),
+            key: "staff",
+            icon: <TeamOutlined />,
+          },
+        ],
+      },
+      {
+        label: <span>Quản lý sản phẩm</span>,
+        // key: 'user',
+        icon: <ExceptionOutlined />,
+        children: [
+          {
+            label: (
+              <Link style={{ textDecoration: "none" }} to="/admin/product">
+                Sản phẩm
+              </Link>
+            ),
+            key: "product",
+            icon: <TeamOutlined />,
+          },
+          {
+            label: <span>Kho</span>,
+            key: "warehouse",
+            children: [
+              {
+                label: (
+                  <Link
+                    style={{ textDecoration: "none" }}
+                    to="/admin/product/receipt"
+                  >
+                    Nhập kho
+                  </Link>
+                ),
+                key: "receipt",
+                // icon: <TeamOutlined />,
+              },
+              {
+                label: (
+                  <Link
+                    style={{ textDecoration: "none" }}
+                    to="/admin/product/receipt/inventory"
+                  >
+                    Kiểm kho
+                  </Link>
+                ),
+                key: "inventory",
+                // icon: <TeamOutlined />,
+              },
+            ],
+          },
+          {
+            label: (
+              <Link
+                style={{ textDecoration: "none" }}
+                to="/admin/product/partner"
+              >
+                Nhà cung cấp
+              </Link>
+            ),
+            key: "partner",
+          },
+        ],
+      },
+
+      {
+        label: (
+          <Link style={{ textDecoration: "none" }} to="/admin/order">
+            Quản lý hóa đơn
+          </Link>
+        ),
+        key: "order",
+        icon: <DollarCircleOutlined />,
+      },
+      {
+        label: <span>Thống kê</span>,
+        // key: 'user',
+        icon: <AppstoreOutlined />,
+        children: [
+          {
+            label: (
+              <Link
+                style={{ textDecoration: "none" }}
+                to="/admin/revenuestatistic"
+              >
+                Báo cáo bán hàng
+              </Link>
+            ),
+            key: "1",
+          },
+          {
+            label: (
+              <Link
+                style={{ textDecoration: "none" }}
+                to="/admin/revenuestatistic/receiptstatistic"
+              >
+                Báo cáo nhập hàng
+              </Link>
+            ),
+            key: "2",
+          },
+          {
+            label: (
+              <Link
+                style={{ textDecoration: "none" }}
+                to="/admin/revenuestatistic/profitstatistic"
+              >
+                Báo cáo lợi nhuận
+              </Link>
+            ),
+            key: "3",
+          },
+        ],
+      },
+      {
+        label: <span>Tài khoản của tôi</span>,
+
+        icon: <DollarCircleOutlined />,
+        children: [
+          {
+            label: (
+              <Link style={{ textDecoration: "none" }} to="/admin/account">
+                Thông tin tài khoản
+              </Link>
+            ),
+            key: "account",
+            icon: <TeamOutlined />,
+          },
+          {
+            label: (
+              <Link
+                style={{ textDecoration: "none" }}
+                to="/admin/account/password"
+              >
+                Đổi mật khẩu
+              </Link>
+            ),
+            key: "password",
+            icon: <TeamOutlined />,
+          },
+        ],
+      },
+
+      {
+        label: <div onClick={showModal}>Đăng xuất</div>,
+        key: "logout",
+        icon: <DollarCircleOutlined />,
+      },
+    ];
+  }
 
   const itemsDropdown = [
     {

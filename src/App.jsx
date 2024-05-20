@@ -31,7 +31,13 @@ import Pay from "./pages/pay";
 import OrderDetails from "./components/Account/HistoryOrder/OrderDetails";
 import ChangePassAdmin from "./components/Admin/ChangePassAdmin";
 import StaffTable from "./components/Admin/User/Staff/StaffTable";
-
+import Receipt from "./components/Admin/Receipt/Receipt";
+import Inventory from "./components/Admin/Inventory/Inventory";
+import Partner from "./components/Admin/Partner/Partner";
+import ReceiptStatistic from "./components/Admin/Statistic/ReceiptStatistic.";
+import RevenueStatistic from "./components/Admin/Statistic/RevenueStatistic";
+import ProfitStatistic from "./components/Admin/Statistic/ProfitStatistic";
+import 'bootstrap/dist/css/bootstrap.min.css';
 const Layout = () => {
   const [searchTerm, setSearchTerm] = useState("");
   return (
@@ -168,11 +174,54 @@ export default function App() {
         },
         {
           path: "product",
-          element: <ProductTable />,
+          children: [
+            {
+              index : true,
+              element: <ProductTable />,
+            },
+            {
+              path: "receipt",
+              children: [
+                {
+                  index : true,
+                  element: <Receipt />,
+                },
+                {
+                  path: "inventory",
+                  element: <Inventory/>,
+                },
+              ],
+            },
+            {
+              path : 'partner',
+              element: <Partner />,
+            },
+          ],
         },
+        // {
+        //   path: "product",
+        //   element: <ProductTable />,
+        // },
         {
           path: "order",
           element: <OrderTable />,
+        },
+        {
+          path: "revenuestatistic",
+          children: [
+            {
+              index : true,
+              element: <RevenueStatistic />,
+            },
+            {
+              path: "receiptstatistic",
+              element: <ReceiptStatistic/>,
+            },
+            {
+              path: "profitstatistic",
+              element: <ProfitStatistic/>,
+            },
+          ],
         },
         {
           path: "account",
