@@ -35,6 +35,7 @@ import {
   import moment from "moment";
   import { render } from "@testing-library/react";
   import FormItem from "antd/es/form/FormItem";
+import { useSelector } from "react-redux";
   // import {CategoryScale} from 'chart.js';
   const { RangePicker } = DatePicker;
   
@@ -151,6 +152,7 @@ import {
       "https://backend-online-supermarket-sales-website.onrender.com/api/v1/inventoryCheck";
     const apiProduct =
       "https://backend-online-supermarket-sales-website.onrender.com/api/v1/products";
+    // const user=useSelector(state => state.account)
     const token =
       "eyJhbGciOiJIUzM4NCJ9.eyJwaG9uZU51bWJlciI6IjAxMjM0NTY3ODkiLCJzdWIiOiIwMTIzNDU2Nzg5IiwiaWF0IjoxNzE1ODIyOTMxLCJleHAiOjE3MTg0MTQ5MzF9.URI8rt4769uqmVEuRW7-Sazom_zg18fojXZOsBnmL6seMA5CIZn8Lk1vi0JeE8kr";
     const apiUser =

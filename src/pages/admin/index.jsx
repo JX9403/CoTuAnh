@@ -18,6 +18,7 @@ import {
     BarElement,
   } from "chart.js";
   import { Bar, Line } from "react-chartjs-2";
+  import moment from "moment";
   import axios from 'axios';
   // import {CategoryScale} from 'chart.js';
   const { RangePicker } = DatePicker;
@@ -31,35 +32,58 @@ import {
       setselectOption(value);
     };
     // Hiển thị doanh thu với số đơn hàng theo ngày 
-    const [totalRevenue, setTotalRevenue] = useState(0);
-    const [totalBills, setTotalBills] = useState(0);
-  
+    const [data,setData]=useState([])
+    const formatDate = (originalDate) => {
+        // Parse ngày ban đầu thành một đối tượng Date
+        const date = new Date(originalDate);
+      
+        // Lấy ngày, tháng và năm từ đối tượng Date
+        const year = date.getFullYear();
+        const month = padZero(date.getMonth() + 1);
+        const day = padZero(date.getDate());
+      
+        // Định dạng lại thành chuỗi theo định dạng mong muốn
+        return `${year}-${month}-${day}T00:00`;
+      };
+      const padZero = (number) => {
+        return number < 10 ? "0" + number : number;
+      };
+    const token =
+    "eyJhbGciOiJIUzM4NCJ9.eyJwaG9uZU51bWJlciI6IjAxMjM0NTY3ODkiLCJzdWIiOiIwMTIzNDU2Nzg5IiwiaWF0IjoxNzE1ODIyOTMxLCJleHAiOjE3MTg0MTQ5MzF9.URI8rt4769uqmVEuRW7-Sazom_zg18fojXZOsBnmL6seMA5CIZn8Lk1vi0JeE8kr";
     const handleRangeChange = async (dates) => {
-      if (dates && dates.length === 2) {
-        const startDate = dates[0].startOf('day').toISOString();
-        const endDate = dates[1].endOf('day').toISOString();
-        
-        try {
-          const response = await axios.get(api);
-          const data = response.data;
-  
-          const filteredData = data.filter(item => {
-            const time = new Date(item.time).getTime();
-            return time >= new Date(startDate).getTime() && time <= new Date(endDate).getTime();
-          });
-  
-          const revenueSum = filteredData.reduce((acc, curr) => acc + curr.revenue, 0);
-          const billsSum = filteredData.reduce((acc, curr) => acc + curr.bills, 0);
-  
-          setTotalRevenue(revenueSum);
-          setTotalBills(billsSum);
-        } catch (error) {
-          console.error('Error fetching data:', error);
-        }
-      } else {
-        setTotalBills(0);
-        setTotalRevenue(0);
-      }}
+        if (dates && dates.length === 2) {
+            const startDate = dates[0].startOf("day").toISOString();
+            const endDate = dates[1].endOf("day").toISOString();
+            console.log(formatDate(startDate))
+            console.log(formatDate(endDate))
+            const apiUrl = `https://backend-online-supermarket-sales-website.onrender.com/api/v1/statistics/statisticsOverview?startDate=${encodeURIComponent(formatDate(startDate))}&endDate=${encodeURIComponent(formatDate(endDate))}`;
+            try {
+              axios
+                .get(apiUrl, {
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                    accept: "*/*",
+                  },
+                })
+                .then((res) => {
+                  setData(res.data);
+                })
+                .catch((error) => {
+                  setLoading(false);
+                  if (error.response) {
+                    console.error(
+                      `Error: ${error.response.status} - ${error.response.data}`
+                    );
+                  } else if (error.request) {
+                    console.error("No response received:", error.request);
+                  } else {
+                    console.error("Error setting up request:", error.message);
+                  }
+                });
+            } catch (error) {
+              console.error('Error fetching data:', error);
+            }
+          }}
     
       const [chartData, setChartData] = useState({
         labels: [],
@@ -96,7 +120,7 @@ import {
           <Typography className="mb-2">Thời gian:</Typography>
           <Space>
             <RangePicker
-              onChange={handleRangeChange}
+              onChange={(dates) => handleRangeChange(dates)}
               placeholder={"Ngày"}
               style={{ borderColor: "#A4A4A4" }}
               className="mb-3"
@@ -117,7 +141,7 @@ import {
                 />
               }
               title={"Tổng quan doanh thu"}
-              value={totalRevenue}
+              value={data?.total_revenue}
             />
             <DashboardCard
               icon={
@@ -133,7 +157,7 @@ import {
                 />
               }
               title={"Số đơn hàng"}
-              value={totalBills}
+              value={data?.number_of_orders}
             />
             <DashboardCard
               icon={
@@ -149,7 +173,7 @@ import {
                 />
               }
               title={"Lợi nhuận"}
-              value={150000000}
+              value={`${data?.profit} VNĐ`}
             />
           </Flex>
         </Card>
