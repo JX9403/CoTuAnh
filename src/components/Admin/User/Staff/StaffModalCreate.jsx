@@ -1,6 +1,6 @@
 import { useForm } from "antd/es/form/Form";
 import { useState } from "react";
-import { Divider, Form, Input, Modal, message, notification, DatePicker } from "antd";
+import { Divider, Form, Input, Modal, message, notification, DatePicker, Select } from "antd";
 import { callCreateStaff } from "../../../../services/apiAdmin";
 
 const StaffModalCreate = (props) => {
@@ -8,7 +8,11 @@ const StaffModalCreate = (props) => {
   const [isSubmit, setIsSubmit] = useState(false);
   const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY', 'DD-MM-YYYY', 'DD-MM-YY'];
   const [form] = useForm();
-
+  const optionRole = [
+    { value: "ADMIN", label: "ADMIN" },
+    { value: "SALES", label: "SALES" },
+    { value: "WAREHOUSES", label: "WAREHOUSES" },
+  ];
   // "email": "string",
   // "password": "string",
   // "phone_number": "6206344080294140278881918447",
@@ -147,7 +151,12 @@ const StaffModalCreate = (props) => {
             name="role"
             rules={[{ required: true, message: "Vai trò không được để trống!" }]}
           >
-            <Input />
+             <Select
+             
+              width="100%"
+           
+              options={optionRole}
+            />
           </Form.Item>
           <Form.Item
             labelCol={{ span: 24 }} //whole column

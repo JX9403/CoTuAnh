@@ -23,7 +23,7 @@ const ClientModalCreate = (props) => {
       email: values.email,
       password: values.password,
       phone_number: values.phone_number,
-      role: values.role,
+      role: "USER",
       address: values.address,
       date_of_birth: values.dateofbirth.toString(),
       avatar: "",
@@ -147,7 +147,7 @@ const ClientModalCreate = (props) => {
             name="role"
             rules={[{ required: true, message: "Vai trò không được để trống!" }]}
           >
-            <Input />
+            <Input defaultValue="USER" disabled />
           </Form.Item>
           <Form.Item
             labelCol={{ span: 24 }} //whole column

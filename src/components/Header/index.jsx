@@ -61,10 +61,12 @@ const Header = (props) => {
     navigate("/");
   };
 
-  let items = [
-    {
-      label: <Link to="/account">Quản lý tài khoản</Link>,
-      key: "account",
+  let items = [];
+
+ if(user.role === 'ADMIN')  {
+    items = [{
+      label: <Link to="/admin">Trang quản trị</Link>,
+      key: "admin",
     },
     {
       label: (
@@ -73,8 +75,23 @@ const Header = (props) => {
         </label>
       ),
       key: "logout",
-    },
-  ];
+    },]
+  } else  {
+    items = [
+      {
+        label: <Link to="/account">Quản lý tài khoản</Link>,
+        key: "account",
+      },
+      {
+        label: (
+          <label style={{ cursor: "pointer" }} onClick={() => handleLogout()}>
+            Đăng xuất
+          </label>
+        ),
+        key: "logout",
+      },
+    ]
+  }
 
   return (
     <>
@@ -145,7 +162,6 @@ const Header = (props) => {
             <div className="header__account">
               {!isAuthenticated ? (
                 <span onClick={() => navigate("/login")}>
-                  {" "}
                   <GithubOutlined className="icon-acc" />
                 </span>
               ) : (

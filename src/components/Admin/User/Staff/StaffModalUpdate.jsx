@@ -7,6 +7,7 @@ import {
   Form,
   Input,
   Modal,
+  Select,
   message,
   notification,
 } from "antd";
@@ -41,6 +42,12 @@ const StaffModalUpdate = (props) => {
   // address: values.address,
   // date_of_birth: values.dateofbirth.toString(),
   // avatar: "",
+
+  const optionRole = [
+    { value: "ADMIN", label: "ADMIN" },
+    { value: "SALES", label: "SALES" },
+    { value: "WAREHOUSES", label: "WAREHOUSES" },
+  ];
   const onFinish = async (values) => {
     values.newPassword = values.newPassword
       ? values.newPassword
@@ -172,7 +179,10 @@ const StaffModalUpdate = (props) => {
               { required: true, message: "Vai trò không được để trống!" },
             ]}
           >
-            <Input />
+            <Select
+             width="100%"
+             options={optionRole}
+           />
           </Form.Item>
           <Form.Item
             labelCol={{ span: 24 }} //whole column
