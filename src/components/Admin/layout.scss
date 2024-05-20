@@ -6,6 +6,9 @@
         align-items: center;
         justify-content: space-between;
         padding: 0 15px;
+        a{
+            color: #7dc22a!important;
+        }
     }
     .icon-acc{
         font-size: 36px;
@@ -17,10 +20,10 @@
         font-size: 30px;
         cursor: pointer;
       }
-    a {
-        text-decoration: none;
+      a{
+        text-decoration: none !important;
+     
     }
-      
 }
 
 .ant-menu-light .ant-menu-item-selected {

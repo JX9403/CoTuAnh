@@ -86,7 +86,7 @@ function Pay() {
   };
   const items = [
     {
-      label: "Vận chuyển tiết kiệm",
+      label: "Vận chuyển nhanh",
       key: "1",
     },
   ];

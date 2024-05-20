@@ -1,11 +1,15 @@
 * {
     margin: 0 0;
 }
-
+button {
+    p {
+      margin: 0;
+    }
+  }
 .cart {
     background: #F9F9F9;
     padding: 30px 120px;
-
+   
     &-d1 {
         border-radius: 10px;
         background: #AFE970;
