@@ -1,4 +1,4 @@
-import { Card, Space, Typography, DatePicker, Statistic, Flex,Menu,Select,Table } from "antd";
+import { Card, Space, Typography, DatePicker, Statistic, Flex,Menu,Select,Table,Skeleton } from "antd";
 import React, { useState } from "react";
 import axios from 'axios';
 import { DollarOutlined, FormOutlined, RiseOutlined,DownloadOutlined } from "@ant-design/icons";
@@ -20,21 +20,18 @@ export default function RevenueStatistic() {
       title: "Doanh thu",
       dataIndex: "revenue",
       key: "revenue",
+      render: (text) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(text)
     },
     {
       title: "% Doanh thu",
       dataIndex: "percent",
       key: "percent",
+      render: (text) => `${text}%`
     },
     {
       title: "Người mua",
       dataIndex: "buyer",
       key: "buyer",
-    },
-    {
-      title: "Tỷ lệ chuyển đổi",
-      dataIndex: "convert",
-      key: "convert",
     },
     
   ];
@@ -59,11 +56,7 @@ export default function RevenueStatistic() {
       dataIndex: "noc",
       key: "noc",
     },
-    {
-      title: "Tỷ lệ chuyển đổi",
-      dataIndex: "convert",
-      key: "convert",
-    },
+    
     
   ];
   const columns3 = [
@@ -81,6 +74,7 @@ export default function RevenueStatistic() {
       title: "% Doanh thu",
       dataIndex: "percent",
       key: "percent",
+       render: (text) => `${text}%`
     },
     {
       title: "Người mua",
@@ -94,6 +88,7 @@ export default function RevenueStatistic() {
     },
     
   ];
+   const [loadingStatistic, setLoadingStatistic] = useState(true);
   
   const formatDate = (originalDate) => {
     const date = new Date(originalDate);
@@ -124,13 +119,14 @@ export default function RevenueStatistic() {
               },
             })
             .then((res) => {
-                const datax = res.data.map(item => ({
+                const tempdata = res.data.map(item => ({
                     category:item.category.categoryName,
                     revenue:item.revenue,
                     percent:item.percent_of_revenue,
                     buyer:item.buyer_num,
                   }));
-              setData(datax);
+              setData(tempdata);
+              setLoadingStatistic(false)
             })
             .catch((error) => {
               setLoading(false);
@@ -145,6 +141,7 @@ export default function RevenueStatistic() {
               }
             });
         } catch (error) {
+          setLoadingStatistic(false)
           console.error('Error fetching data:', error);
         }
       }}
@@ -167,7 +164,12 @@ export default function RevenueStatistic() {
       </Flex>
       <Card style={{background:'#AFE970',marginBottom:20}}>
       <Typography style={{fontSize:18,fontWeight:700,marginBottom:20}}>Theo ngành hàng</Typography>
-      <Table columns={columns} dataSource={data} pagination ={false} />
+       {loadingStatistic ? (
+                <Skeleton active />
+              ) : (
+                <Table columns={columns} dataSource={data} pagination ={false} />
+              )}
+      
       </Card>
       <Card style={{background:'#AFE970',marginBottom:20}}>
       <Typography style={{fontSize:18,fontWeight:700,marginBottom:20}}>Theo đơn giá</Typography>
@@ -182,12 +184,5 @@ export default function RevenueStatistic() {
 }
 
 
-// function DashBoardCard(title,columns,data) {
-//   return (
-//     <Card>
-//       <Typography>{title}</Typography>
-//       <Table columns={columns} dataSource={data} />;
-//     </Card>
-//   )
-// }
+
 
