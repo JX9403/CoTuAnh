@@ -17,6 +17,11 @@ const ClientModalCreate = (props) => {
   // "full_name": "string",
   // "avatar": "string",
   // "role": "ADMIN"
+
+  const optionRole = [
+    { value: "USER", label: "USER" },
+  
+  ];
   const onFinish = async (values) => {
     values = {
       full_name: values.full_name,
@@ -147,7 +152,12 @@ const ClientModalCreate = (props) => {
             name="role"
             rules={[{ required: true, message: "Vai trò không được để trống!" }]}
           >
-            <Input defaultValue="USER" disabled />
+             <Select
+             
+              width="100%"
+           
+              options={optionRole}
+            />
           </Form.Item>
           <Form.Item
             labelCol={{ span: 24 }} //whole column

@@ -172,7 +172,7 @@ const ClientModalUpdate = (props) => {
               { required: true, message: "Vai trò không được để trống!" },
             ]}
           >
-            <Input />
+            <Input disabled />
           </Form.Item>
           <Form.Item
             labelCol={{ span: 24 }} //whole column
