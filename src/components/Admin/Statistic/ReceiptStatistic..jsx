@@ -1,4 +1,4 @@
-import { Card, Space, Typography, DatePicker, Statistic, Flex,Menu,Select,Table } from "antd";
+import { Skeleton,Card, Space, Typography, DatePicker, Statistic, Flex,Menu,Select,Table } from "antd";
 import React, { useState ,useEffect} from "react";
 import { DollarOutlined, FormOutlined, RiseOutlined,MinusOutlined } from "@ant-design/icons";
 import { CategoryScale, Chart as ChartJS,LinearScale,BarElement} from "chart.js";
@@ -54,9 +54,11 @@ const api="https://backend-online-supermarket-sales-website.onrender.com/api/v1/
 const [totalValues, setTotalValues] = useState(0);
 const [totalDebt, setTotalDebt] = useState(0);
 const [totalBills,setTotalBills]=useState(0)
+const [receiptLoading,setReceiptLoading]=useState(false)
 const token =
     "eyJhbGciOiJIUzM4NCJ9.eyJwaG9uZU51bWJlciI6IjAxMjM0NTY3ODkiLCJzdWIiOiIwMTIzNDU2Nzg5IiwiaWF0IjoxNzE1ODIyOTMxLCJleHAiOjE3MTg0MTQ5MzF9.URI8rt4769uqmVEuRW7-Sazom_zg18fojXZOsBnmL6seMA5CIZn8Lk1vi0JeE8kr";
 useEffect(() => {
+  setReceiptLoading(true)
   fetch(api,
     {
       method: "GET",
@@ -77,6 +79,7 @@ useEffect(() => {
       setTotalValues(jsonData.reduce((acc, curr) => acc + curr.total_money, 0));
       setTotalDebt(jsonData.reduce((acc, curr) => acc + curr.owe, 0));
       setTotalBills(jsonData.length)
+      setReceiptLoading(false)
     })
     .catch((error) => {
       console.error("Error fetching data:", error);
@@ -88,6 +91,7 @@ useEffect(() => {
 
 
   const handleRangeChange = async (dates) => {
+    setReceiptLoading(true)
     if (dates && dates.length === 2) {
       const startDate = dates[0].startOf('day').toISOString();
       const endDate = dates[1].endOf('day').toISOString();
@@ -100,7 +104,6 @@ useEffect(() => {
           },
         });
         const data = response.data;
-        
         const filteredData = data.filter(item => {
           const time = new Date(item.delivery_date).getTime();
           return (
@@ -116,6 +119,9 @@ useEffect(() => {
         setTotalBills(filteredData.length)
       } catch (error) {
         console.error('Error fetching data:', error);
+      }
+      finally {
+        setReceiptLoading(false)
       }
     } else {
       setTotalValues(0);
@@ -135,7 +141,10 @@ useEffect(() => {
             className="mb-3"
           />
         </Space>
-        <Flex justify="space-between">
+        {receiptLoading ? (
+                  <Skeleton active />
+                ) : (
+                  <Flex justify="space-between">
           <BigDashboardCard
             icon={
               <DollarOutlined
@@ -185,6 +194,8 @@ useEffect(() => {
             value={totalDebt}
           />
         </Flex>
+                )}
+        
       </Card>
       <Card className="chart-statistic" >
       <Table columns={columns} dataSource={tableData} />;

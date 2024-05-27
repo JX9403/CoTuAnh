@@ -35,6 +35,7 @@ import {
   import moment from "moment";
   import { render } from "@testing-library/react";
   import FormItem from "antd/es/form/FormItem";
+import { useSelector } from "react-redux";
   // import {CategoryScale} from 'chart.js';
   const { RangePicker } = DatePicker;
   
@@ -49,7 +50,6 @@ import {
     const [loadingDelete, setLoadingDelete] = useState(false);
     const [editingRecord, setEditingRecord] = useState(null);
     const [viewRecord, setViewRecord] = useState(null);
-    const { id } = useParams();
     const addAction = () => {
       setFormAdd(!formAdd);
     };
@@ -151,6 +151,7 @@ import {
       "https://backend-online-supermarket-sales-website.onrender.com/api/v1/inventoryCheck";
     const apiProduct =
       "https://backend-online-supermarket-sales-website.onrender.com/api/v1/products";
+    // const user=useSelector(state => state.account)
     const token =
       "eyJhbGciOiJIUzM4NCJ9.eyJwaG9uZU51bWJlciI6IjAxMjM0NTY3ODkiLCJzdWIiOiIwMTIzNDU2Nzg5IiwiaWF0IjoxNzE1ODIyOTMxLCJleHAiOjE3MTg0MTQ5MzF9.URI8rt4769uqmVEuRW7-Sazom_zg18fojXZOsBnmL6seMA5CIZn8Lk1vi0JeE8kr";
     const apiUser =
@@ -313,6 +314,15 @@ import {
         const productk = product.find((i) => i.product_id === productId);
         return productk ? productk.product_name : "N/A";
       };
+
+      //Lọc 
+      const filterCategory = (e) => {
+        if (e == "Tất cả") {
+          setTableData(data);
+        } else {
+          setTableData(data.filter((x) => x.status === e));
+        }
+      };
   
     const columnsProduct = [
       {
@@ -378,34 +388,19 @@ import {
                     Tìm kiếm
                   </Button>
                   <Select
-                    className="me-4"
-                    placeholder="Trạng thái"
-                    style={{
-                      width: 200,
-                    }}
-                    options={[
-                      {
-                        value: "Đã tạo",
-                        label: "Đã tạo",
-                      },
-                      {
-                        value: "Đang nhập dữ liêu",
-                        label: "Đang nhập dữ liệu ",
-                      },
-                      {
-                        value: "Đã hoàn thành nhập dữ liệu",
-                        label: "Đã hoàn thành nhập dữ liệu",
-                      },
-                      {
-                        value: "Đã cân bằng",
-                        label: "Đã cân bằng",
-                      },
-                      {
-                        value: "Hủy bỏ",
-                        label: "Hủy bỏ",
-                      },
-                    ]}
-                  />
+                  onChange={filterCategory}
+                  defaultValue={"Tất cả"}
+                  style={{ width: 200 }}
+                >
+                  <Select.Option value="Tất cả">Tất cả</Select.Option>
+                  <Select.Option value="Đã tạo">Đã tạo</Select.Option>
+                <Select.Option value="Đang nhập hàng">
+                  Đang nhập dữ liệu
+                </Select.Option>
+                <Select.Option value="Đã nhập kho">Đã hoàn thành nhập dữ liệu</Select.Option>
+                <Select.Option value="Đã hoàn tất">Đã cân bằng</Select.Option>
+                <Select.Option value="Hủy bỏ">Hủy bỏ</Select.Option>
+                </Select>
                 </Space>
               </Card>
               <Card className="chart-statistic">
@@ -657,6 +652,20 @@ import {
         ),
       },
     ];
+
+    // chuyển đổi format ngày : 
+    const convertDate=(date)=>{
+      const dateObject = new Date(date);
+
+// Sử dụng các phương thức của đối tượng Date để lấy ra ngày, tháng và năm
+      const year = dateObject.getFullYear();
+      const month = dateObject.getMonth() + 1; // Tháng bắt đầu từ 0 nên cần cộng thêm 1
+      const day = dateObject.getDate();
+
+// Định dạng lại chuỗi ngày tháng theo yêu cầu "2024-05-24T00:00"
+      const formattedDate = `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}T00:00`;
+      return formattedDate
+    }
   
     //thêm mới phiếu
     const [form] = Form.useForm();
@@ -667,6 +676,7 @@ import {
           name: "phiếu tạo",
           status: values.status,
           note: values.note,
+          verification_date:convertDate(values.verification_date),
           inventory_check_details: data.map((item, index) => ({
             product_id: item.product_id,
             actual_inventory: values[index].actual_inventory,
